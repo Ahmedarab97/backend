@@ -1,5 +1,6 @@
 package nl.penguins.learnditwin.info.presentation;
 
+import nl.penguins.learnditwin.info.application.VerbandInformatieDTO;
 import nl.penguins.learnditwin.info.application.VerbandService;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,8 @@ public class VerbandController {
     }
 
     @GetMapping
-    public String genereerVerband() {
-        return verbandService.getVerband();
+    @CrossOrigin(origins = "http://localhost:5173")
+    public VerbandInformatieDTO genereerVerband() {
+        return new VerbandInformatieDTO(verbandService.getVerband());
     }
 }
