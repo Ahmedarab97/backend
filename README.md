@@ -8,5 +8,5 @@ Java
 
 Javascript
 - Functions
-- Class
+- Class??
 - Variables
