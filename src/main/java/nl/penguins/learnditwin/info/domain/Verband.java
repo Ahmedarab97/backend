@@ -1,7 +1,5 @@
 package nl.penguins.learnditwin.info.domain;
 
-import jakarta.persistence.*;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -9,12 +7,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-//@Entity
 public class Verband <T> {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
-
     private String verbandUitleg;
     private T objectTeVergelijken;
     private T gemiddeldeObjecten;
@@ -25,12 +18,55 @@ public class Verband <T> {
         this.verbandUitleg = genereerVerband(attribuutTeVergelijken);
     }
 
+    public Verband(String attribuutTeVergelijken, String attribuutTeVergelijkenMet, T objectTeVergelijken, T gemiddeldeObjecten) {
+        this.objectTeVergelijken = objectTeVergelijken;
+        this.gemiddeldeObjecten = gemiddeldeObjecten;
+        this.verbandUitleg = genereerVerbandTussen(attribuutTeVergelijken, attribuutTeVergelijkenMet);
+    }
+
     protected Verband() {
 
     }
 
     public static <T> Verband<T> genereerVerband(String attribuut, T objectToCompare, T averageObject) {
         return new Verband<>(attribuut, objectToCompare, averageObject);
+    }
+
+    public static <T> Verband<T> genereerVerband(String attribuut, String attribuutVergelijkenMet, T objectToCompare, T averageObject) {
+        return new Verband<>(attribuut, objectToCompare, averageObject);
+    }
+
+    public String genereerVerbandTussen(String attribuutTeVergelijken, String attribuutVergelijkenMet){
+        String verband = "geen verband gevonden";
+
+        try {
+            Method getAttribuut = objectTeVergelijken.getClass().getMethod("get" + attribuutTeVergelijken);
+            Method getAttribuutVergelijkenMet = objectTeVergelijken.getClass().getMethod("get" + attribuutVergelijkenMet);
+
+            int stijgingPercentageAttribuut = berekenStijgingPercentageVanGetterWaarde(getAttribuut);
+            int stijgingPercentage = berekenStijgingPercentageVanGetterWaarde(getAttribuutVergelijkenMet);
+
+            boolean vergelijkAttribuutIsToegenomen = stijgingPercentageAttribuut >= 0;
+            boolean attribuutIsToegenomen = stijgingPercentage >= 0;
+
+            int percentageVerschil = Math.abs(Math.abs(stijgingPercentage) - Math.abs(stijgingPercentageAttribuut));
+
+            if(percentageVerschil <= 5){
+                if(vergelijkAttribuutIsToegenomen && attribuutIsToegenomen){
+                    verband = String.format("%s en %s hadden ongeveer een gelijke stijging meegemaakt", attribuutTeVergelijken, attribuutVergelijkenMet);
+                } else if(vergelijkAttribuutIsToegenomen && !attribuutIsToegenomen){
+                    verband = String.format("Toen de %s toenam, vertoonde %s een evenredige afname in dezelfde mate.", attribuutTeVergelijken, attribuutVergelijkenMet);
+                } else if(!vergelijkAttribuutIsToegenomen && attribuutIsToegenomen){
+                    verband = String.format("Toen de %s afnam, vertoonde %s een evenredige toename in dezelfde mate.", attribuutTeVergelijken, attribuutVergelijkenMet);
+                }else if(!vergelijkAttribuutIsToegenomen && !attribuutIsToegenomen){
+                    verband = String.format("%s en %s hadden ongeveer een gelijke afname meegemaakt.", attribuutTeVergelijken, attribuutVergelijkenMet);
+                }
+            }
+
+            return verband;
+        } catch (Exception e) {
+            return verband;
+        }
     }
 
     public String genereerVerband(String attribuutTeVergelijken){

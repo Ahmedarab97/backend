@@ -15,7 +15,7 @@ public class VerbandController {
 
     @PostMapping
     public String genereerVerband(@RequestBody VerbandDTO verbandDTO) {
-        return verbandService.getVerband(verbandDTO.attribuutTeVergelijken(), verbandDTO.idTeVergelijken(), verbandDTO.idObjectenGemiddelde());
+        return verbandService.getVerband(verbandDTO.attribuutTeVergelijken(), verbandDTO.optioneelMetTeVergelijken(), verbandDTO.idTeVergelijken(), verbandDTO.idObjectenGemiddelde());
     }
 
     @GetMapping
