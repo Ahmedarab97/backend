@@ -1,4 +1,4 @@
-package nl.penguins.learnditwin.info.presentation;
+package nl.penguins.learnditwin.dataconverter.presentation;
 
 import nl.penguins.learnditwin.info.application.VerbandInformatieDTO;
 import nl.penguins.learnditwin.info.application.VerbandService;
