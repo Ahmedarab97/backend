@@ -1,4 +1,4 @@
-package nl.penguins.learnditwin.dataconverter.domain;
+package nl.penguins.learnditwin.layers.domain;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

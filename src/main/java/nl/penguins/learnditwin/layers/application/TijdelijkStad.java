@@ -1,4 +1,4 @@
-package nl.penguins.learnditwin.info.application;
+package nl.penguins.learnditwin.layers.application;
 
 public class TijdelijkStad {
     private String naam;

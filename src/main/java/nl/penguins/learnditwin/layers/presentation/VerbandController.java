@@ -1,7 +1,8 @@
-package nl.penguins.learnditwin.dataconverter.presentation;
+package nl.penguins.learnditwin.layers.presentation;
 
-import nl.penguins.learnditwin.info.application.VerbandInformatieDTO;
-import nl.penguins.learnditwin.info.application.VerbandService;
+import nl.penguins.learnditwin.layers.application.VerbandDTO;
+import nl.penguins.learnditwin.layers.application.VerbandInformatieDTO;
+import nl.penguins.learnditwin.layers.application.VerbandService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

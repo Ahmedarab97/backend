@@ -1,6 +1,6 @@
-package nl.penguins.learnditwin.dataconverter.application;
+package nl.penguins.learnditwin.layers.application;
 
-import nl.penguins.learnditwin.info.domain.Verband;
+import nl.penguins.learnditwin.layers.domain.Verband;
 import org.springframework.stereotype.Service;
 
 @Service
