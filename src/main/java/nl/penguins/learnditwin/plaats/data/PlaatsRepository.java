@@ -1,4 +1,8 @@
 package nl.penguins.learnditwin.plaats.data;
 
-public interface PlaatsRepository {
+import nl.penguins.learnditwin.plaats.domain.Wijk;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface PlaatsRepository extends MongoRepository<Wijk, ObjectId> {
 }

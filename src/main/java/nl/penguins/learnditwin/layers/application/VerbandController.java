@@ -1,4 +1,4 @@
-package nl.penguins.learnditwin.dataconverter.data.presentation;
+package nl.penguins.learnditwin.layers.application;
 
 import nl.penguins.learnditwin.layers.application.VerbandDTO;
 import nl.penguins.learnditwin.layers.application.VerbandInformatieDTO;
