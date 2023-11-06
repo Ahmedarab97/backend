@@ -16,11 +16,11 @@ export async function pakCoordinaten() {
 }
 
 export async function pakBoundaries() {
-    const response = await getBoundingBoxForNeighborhood("New York")
-        console.log('Min Lon:', response.minLon);
-        console.log('Max Lon:', response.maxLon);
-        console.log('Min Lat:', response.minLat);
-        console.log('Max Lat:', response.maxLat);
+    const response = await getBoundingBoxForNeighborhood("")
+    console.log('Min Lon:', response.minLon);
+    console.log('Max Lon:', response.maxLon);
+    console.log('Min Lat:', response.minLat);
+    console.log('Max Lat:', response.maxLat);
 }
 
 
