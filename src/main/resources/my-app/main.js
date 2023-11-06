@@ -7,6 +7,7 @@ import Point from 'ol/geom/Point';
 import { Vector } from 'ol/source';
 import { Vector as VectorLayer } from 'ol/layer';
 import {Heatmap} from 'ol/layer'
+import {pakBoundaries, pakCoordinaten} from "./javascript/layers/laaggeltterdheidLayer";
 
 var coordinates = [
   [5.0908, 52.0305],
@@ -83,6 +84,9 @@ fetch("http://localhost:8080/fitheid").then(response => response.json())
     .then(data => {
       tekst.innerHTML = data.kleur;
     })
+
+pakCoordinaten();
+pakBoundaries();
 
 // var map = L.map('map').setView([51.505, -0.09], 13);
 // L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
