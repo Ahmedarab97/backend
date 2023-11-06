@@ -7,20 +7,11 @@ import Point from 'ol/geom/Point';
 import { Vector } from 'ol/source';
 import { Vector as VectorLayer } from 'ol/layer';
 import {Heatmap} from 'ol/layer'
-import "../openstreetmap/openstreetmapAPI";
-import {getBoundingBoxForNeighborhood, getCoordinatenVanOpenStreetMap} from "../openstreetmap/openstreetmapAPI";
+import {getCoordinatenVanOpenStreetMap} from "../openstreetmap/openstreetmapAPI";
 
 export async function pakCoordinaten() {
     const coordinaten = await getCoordinatenVanOpenStreetMap("Raadstede");
     console.log(coordinaten);
-}
-
-export async function pakBoundaries() {
-    const response = await getBoundingBoxForNeighborhood("")
-    console.log('Min Lon:', response.minLon);
-    console.log('Max Lon:', response.maxLon);
-    console.log('Min Lat:', response.minLat);
-    console.log('Max Lat:', response.maxLat);
 }
 
 
