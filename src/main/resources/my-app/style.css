@@ -15,3 +15,9 @@ html, body {
 input {
   margin-top: 620px;
 }
+
+.custom-point-style {
+  fill: #ff0000; /* Rode vulkleur */
+  stroke: #000000; /* Zwarte lijnkleur */
+  stroke-width: 2px; /* Lijnbreedte van 2 pixels */
+}

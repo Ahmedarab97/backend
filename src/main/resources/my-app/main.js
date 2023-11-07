@@ -1,7 +1,12 @@
 import { Map, View } from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
-import {laaggeletterdheidLayer, pakCoordinaten} from "./javascript/layers/laaggeltterdheidLayer";
+import {laaggeletterdheidLayer} from "./javascript/layers/laaggeltterdheidLayer";
+import VectorSource from "ol/source/Vector";
+import VectorLayer from "ol/layer/Vector";
+import {Point} from "ol/geom";
+import Feature from "ol/Feature";
+import {Heatmap} from "ol/layer";
 
 var coordinates = [
   [5.0908, 52.0305],
@@ -25,8 +30,9 @@ let map = new Map({
 
 
 window.addMarker = async function() {
-  let layer2 = await laaggeletterdheidLayer(["3431BA"]);
+  let layer2 = await laaggeletterdheidLayer(["3431BB"]);
   map.addLayer(layer2);
+  console.log(map.getAllLayers());
 }
 // pakCoordinaten();
 //, "3431BB", "3431BC", "3431BD", "3431BE", "3431BM", "3431CA", "3431CB", "3431CC"
