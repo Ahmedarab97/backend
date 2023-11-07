@@ -8,7 +8,6 @@ export async function getCoordinatenVanOpenStreetMap(postcode) {
     if (data.length !== 0) {
         const result = data[0];
         coordinates = fromLonLat([parseFloat(result.lon), parseFloat(result.lat)]);
-        console.log(coordinates);
         return coordinates
     }
 }
