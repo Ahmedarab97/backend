@@ -19,11 +19,6 @@ export async function laaggeletterdheidLayer(postcodes) {
     try{
         let coordinates =  await Promise.all(postcodes.map(postcode => pakCoordinaten(postcode)));
         console.log(coordinates);
-        // for(let index = 0; index < postcodes.length; index++) {
-        //     let coordinate = await pakCoordinaten(postcodes[index]);
-        //     console.log(coordinate)
-        //     coordinates.push(coordinate);
-        // }
         var heatmapLayer = new Heatmap({
             source: new Vector({
                 features: coordinates.map(function(coord) {
@@ -37,11 +32,6 @@ export async function laaggeletterdheidLayer(postcodes) {
             })
         });
         heatmapLayer.setZIndex(1);
-        // const features = await heatmapLayer.getSource().getFeatures()
-        // features.forEach(feature => {
-        //     const coordinates = feature.getGeometry().getCoordinates();
-        //     console.log(coordinates);
-        // });
         return heatmapLayer;
     }
     catch {
