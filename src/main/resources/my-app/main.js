@@ -30,7 +30,7 @@ let map = new Map({
 
 
 window.addMarker = async function() {
-  let layer2 = await laaggeletterdheidLayer(["3431BB"]);
+  let layer2 = await laaggeletterdheidLayer(["Park Oudegein"]);
   map.addLayer(layer2);
   console.log(map.getAllLayers());
 }
