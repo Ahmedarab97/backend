@@ -15,6 +15,12 @@ import CircleStyle from "ol/style/Circle";
 export async function laaggeletterdheidLayer(postcodes) {
     try{
         let coordinates =  await Promise.all(postcodes.map(postcode => getCoordinatenVanOpenStreetMap(postcode)));
+        console.log(coordinates);
+        // if(postcode in jutphaas){
+        //     switch(buurt) {
+        //         case buurt > 10:
+        //     }
+        // }
 
         var heatmapLayer = new Heatmap({
             source: new Vector({
@@ -25,7 +31,10 @@ export async function laaggeletterdheidLayer(postcodes) {
                 }),
             }),
             blur: 15,
-            radius: 5,
+            radius: 10,
+            fill: new Fill({
+               color: 'green'
+            }),
             gradient: [
                 'rgba(33,102,172,0)',
                 'rgba(178,24,43,1)',
