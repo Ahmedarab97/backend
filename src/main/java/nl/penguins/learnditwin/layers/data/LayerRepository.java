@@ -1,7 +1,7 @@
 package nl.penguins.learnditwin.layers.data;
 
 import nl.penguins.learnditwin.layers.domain.Fitheid;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface LayerRepository extends JpaRepository<Fitheid, Long> {
+public interface LayerRepository extends MongoRepository<Fitheid, Long> {
 }

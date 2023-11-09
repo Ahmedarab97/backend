@@ -1,10 +1,7 @@
 package nl.penguins.learnditwin.plaats.domain;
 
-import nl.penguins.learnditwin.plaats.domain.interfaces.Data;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.FieldType;
-import org.springframework.data.mongodb.core.mapping.MongoId;
+import org.springframework.data.mongodb.core.mapping.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +15,7 @@ public class Buurt {
     private String naam;
     private int aantalInwoners;
     private List<String> postcode6 = new ArrayList<>();
-    private List<Data> datasets; //hier moeten dus alle data sets inkomen die met klasse die Data interface implementeren denk dat het logisch is als we hem dus indentificeren met de naam als string
+    private LaagGeletterdheid laagGeletterdheid;
 
     protected Buurt() {
     }
@@ -38,6 +35,10 @@ public class Buurt {
         this.postcode6.add(postcode6);
     }
 
+    public void setLaagGeletterdheid(LaagGeletterdheid laagGeletterdheid){
+        this.laagGeletterdheid = laagGeletterdheid;
+    }
+
     public String getNaam() {
         return naam;
     }
@@ -46,12 +47,20 @@ public class Buurt {
         return aantalInwoners;
     }
 
+    public void setAantalInwoners(int aantalInwoners) {
+        this.aantalInwoners = aantalInwoners;
+    }
+
     public String getBuurtCode_id() {
         return buurtCode_id;
     }
 
     public List<String> getPostcode6() {
         return postcode6;
+    }
+
+    public LaagGeletterdheid getLaagGeletterdheid() {
+        return laagGeletterdheid;
     }
 
     @Override

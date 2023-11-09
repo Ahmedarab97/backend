@@ -8,5 +8,5 @@ public abstract class FileHandelaar {
     @Autowired
     ZipUitpakker zipUitpakker;
 
-    public abstract List<String[]> readData(String path);
+    public abstract List<String[]> readData(String path, int optioneelSheetNummer);
 }

@@ -25,7 +25,7 @@ public class PlaatsService {
         return this.mongo.findAll(Wijk.class).stream().toList();
     }
 
-    public void saveWijk(String naam, String postcode4, Set<String> buurten) {
+    public void saveWijk(String naam, String postcode4, Set<Buurt> buurten) {
         Wijk wijk =  Wijk.generateWijk(naam, postcode4, buurten);
         mongo.save(wijk);
     }

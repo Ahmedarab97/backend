@@ -21,7 +21,7 @@ public class GWBPostcode6Converter implements DataConverter{
 
     @Override
     public void convertData(String path) {
-        List<String[]> lineParts = fileHandler.readData(path);
+        List<String[]> lineParts = fileHandler.readData(path, 0);
 
         try{
             Set<Wijk> wijken = new HashSet<>();
@@ -39,7 +39,7 @@ public class GWBPostcode6Converter implements DataConverter{
                 Buurt opgeslagenBuurt = buurten.parallelStream().filter(buurt -> buurt.getBuurtCode_id().equals(buurtCode)).findFirst().orElse(new Buurt(buurtCode, buurtNaam));
 
                 opgeslagenBuurt.addStraat(postCode6);
-                opgeslagenWijk.addBuurt(opgeslagenBuurt.getBuurtCode_id());
+                opgeslagenWijk.addBuurt(opgeslagenBuurt);
 
                 wijken.add(opgeslagenWijk);
                 buurten.add(opgeslagenBuurt);

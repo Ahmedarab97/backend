@@ -1,9 +1,6 @@
 package nl.penguins.learnditwin.dataconverter.filetypehandelaar;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.usermodel.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +13,7 @@ import java.util.stream.StreamSupport;
 @Component
 public class ExcelHandelaar extends FileHandelaar{
     @Override
-    public List<String[]> readData(String path) {
+    public List<String[]> readData(String path, int optioneelSheetNummer) {
         try {
             ClassPathResource resource = new ClassPathResource(path);
             InputStream optioneelInputStream = super.zipUitpakker.getInputStreamVanZipMogelijkeZip(resource);
@@ -26,12 +23,20 @@ public class ExcelHandelaar extends FileHandelaar{
             }
             Workbook workbook = WorkbookFactory.create(optioneelInputStream);
 
-            Sheet sheet = workbook.getSheetAt(0);
+            Sheet sheet = workbook.getSheetAt(optioneelSheetNummer);
 
             return StreamSupport.stream(sheet.spliterator(), false)
                     .skip(1)
                     .map(row -> StreamSupport.stream(row.spliterator(), false)
-                            .map(Cell::getStringCellValue)
+                            .map(cell -> {
+                                if (cell.getCellType() == CellType.NUMERIC) {
+                                    return String.valueOf(cell.getNumericCellValue());
+                                } else if (cell.getCellType() == CellType.STRING) {
+                                    return cell.getStringCellValue();
+                                } else {
+                                    return ""; // Voeg hier logica toe voor andere celtypen indien nodig
+                                }
+                            })
                             .toArray(String[]::new))
                     .collect(Collectors.toList());
             } catch (IOException e){
