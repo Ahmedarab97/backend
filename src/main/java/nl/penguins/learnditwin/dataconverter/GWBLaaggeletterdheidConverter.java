@@ -27,7 +27,6 @@ public class GWBLaaggeletterdheidConverter implements DataConverter{
         List<String[]> wijkInfoSheet = fileHandler.readData(path, 1);
         // aantal huishoudens
         // aantal huishoudens met taalgroei
-        // todo: hoe slaan we deze data op gekoppeld aan een buurt neem ik aan?
 
         String[] wijkInfo = wijkInfoSheet.get(0);
 
@@ -38,7 +37,7 @@ public class GWBLaaggeletterdheidConverter implements DataConverter{
 
         System.out.println(buurtNaam);
         System.out.println(wijk);
-        // todo dit geeft meerdere buurten met dezelfde naam. Misschien zoeken vanuit een wijk met een bepaallde naam, naar een buurt
+
         Buurt buurt = plaatsRepository.findBuurtByWijkAndBuurtNaam(wijk, buurtNaam).orElseThrow(() -> new RuntimeException("Buurt niet gevonden"));
 
         int totaalAantalHuishoudensTaalgroei = 0;
