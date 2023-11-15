@@ -7,7 +7,7 @@ import {Circle, Point} from 'ol/geom';
 
 import { Vector as VectorLayer } from 'ol/layer';
 import {Heatmap} from 'ol/layer'
-import {getCoordinatenVanOpenStreetMap} from "../openstreetmap/openstreetmapAPI";
+import {getCoordinatenVanGoogleMaps, getCoordinatenVanOpenStreetMap} from "../openstreetmap/openstreetmapAPI";
 import {forEach} from "ol/geom/flat/segments";
 import {Fill, Stroke, Style} from "ol/style";
 import CircleStyle from "ol/style/Circle";
@@ -15,21 +15,26 @@ import { Vector } from 'ol/source';
 import VectorSource from "ol/source/Vector";
 import Text from 'ol/style/Text';
 
+async function getBuurtenData() {
+    await fetch("http://localhost:8080/gemeente/nieuwegein/buurt").then()
+}
+
 export async function bolletjesLayer() {
     //TODO hier een statement schrijven die alle data van eva ophaalt en die gebruiken voor het maken van de buurten nu nog hardcoded
-    var buurten = [{buurtnaam: "Binnenweides", score: 10}
-        , {buurtnaam: "Blokhoeve", score: 5}
-        , {buurtnaam: "Buitengebied Laagraven", score: 15}
-        , {buurtnaam: "Burgen", score: 11}
-        , {buurtnaam: "De Wiers", score: 9}
-        , {buurtnaam: "Hagen", score: 7}
-        , {buurtnaam: "Jutphaas", score: 25}
-        , {buurtnaam: "Merwestein", score: 23}
-        , {buurtnaam: "Zuilenstein", score: 18}];
+    var buurten = [{buurtnaam: "Binnenweides nieuwegein", score: 10}
+        , {buurtnaam: "Blokhoeve nieuwegein", score: 5}
+        , {buurtnaam: "Buitengebied Laagraven nieuwegein", score: 15}
+        , {buurtnaam: "Burgen nieuwegein", score: 11}
+        , {buurtnaam: "De Wiers nieuwegein", score: 9}
+        , {buurtnaam: "Hagen nieuwegein", score: 7}
+        , {buurtnaam: "Jutphaas nieuwegein", score: 25}
+        , {buurtnaam: "Merwestein nieuwegein", score: 23}
+        , {buurtnaam: "Zuilenstein nieuwegein", score: 18}];
+
     var points = [];
 
     for (const buurt of buurten) {
-        var coordinates = await getCoordinatenVanOpenStreetMap(buurt.buurtnaam);
+        var coordinates = await getCoordinatenVanGoogleMaps(buurt.buurtnaam);
         let coordinatesCijferObject = {
             coord: coordinates,
             cijfer: buurt.score
