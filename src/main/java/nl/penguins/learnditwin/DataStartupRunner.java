@@ -1,5 +1,8 @@
-package nl.penguins.learnditwin.datatodomainconverter;
+package nl.penguins.learnditwin;
 
+import nl.penguins.learnditwin.datatodomainconverter.AlleCijfersGezondheidMonitorConverter;
+import nl.penguins.learnditwin.datatodomainconverter.GWBLaaggeletterdheidConverter;
+import nl.penguins.learnditwin.datatodomainconverter.GWBPostcode6Converter;
 import nl.penguins.learnditwin.datatofileconverter.ObjectToFileConverter;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ClassPathResource;
@@ -13,7 +16,7 @@ import java.util.Scanner;
 
 @Component
 public class DataStartupRunner implements CommandLineRunner {
-    GWBPostcode6Converter GWBPostcode6Converter;
+    nl.penguins.learnditwin.datatodomainconverter.GWBPostcode6Converter GWBPostcode6Converter;
     GWBLaaggeletterdheidConverter laaggeletterdheidConverter;
     AlleCijfersGezondheidMonitorConverter alleCijfersGezondheidMonitorConverter;
     ObjectToFileConverter objectToFileConverter;
@@ -35,7 +38,7 @@ public class DataStartupRunner implements CommandLineRunner {
         System.out.println("Laaggeletterdheid data binnen");
 
         alleCijfersGezondheidMonitorConverter.convertData("data/allecijfers/gezondheidsmonitor-gemeente-nieuwegein.xlsx");
-        objectToFileConverter.convertObjectenNaarExcel("Nieuwegein", "data");
+//        objectToFileConverter.convertObjectenNaarExcel("Nieuwegein", "data");
     }
 
     private List<String> getPathFromFilesInMap(String mapPath) throws IOException {
