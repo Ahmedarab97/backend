@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class PlaatsService {
@@ -24,7 +25,7 @@ public class PlaatsService {
         return this.mongo.findAll(Wijk.class).stream().toList();
     }
 
-    public void saveWijk(String naam, String postcode4, List<Buurt> buurten) {
+    public void saveWijk(String naam, String postcode4, Set<Buurt> buurten) {
         Wijk wijk =  Wijk.generateWijk(naam, postcode4, buurten);
         mongo.save(wijk);
     }
