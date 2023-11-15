@@ -1,4 +1,4 @@
-package nl.penguins.learnditwin.dataconverter;
+package nl.penguins.learnditwin.datatodomainconverter;
 
 public interface DataConverter{
     void convertData(String path);
