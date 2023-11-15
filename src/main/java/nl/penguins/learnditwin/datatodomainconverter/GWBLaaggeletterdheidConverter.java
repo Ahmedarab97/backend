@@ -1,12 +1,16 @@
-package nl.penguins.learnditwin.dataconverter;
+package nl.penguins.learnditwin.datatodomainconverter;
 
-import nl.penguins.learnditwin.dataconverter.filetypehandelaar.ExcelHandelaar;
+import nl.penguins.learnditwin.datatodomainconverter.filetypehandelaar.ExcelHandelaar;
 import nl.penguins.learnditwin.plaats.data.BuurtRepository;
 import nl.penguins.learnditwin.plaats.data.PlaatsRepository;
 import nl.penguins.learnditwin.plaats.domain.Buurt;
-import nl.penguins.learnditwin.plaats.domain.LaagGeletterdheid;
+import nl.penguins.learnditwin.plaats.domain.buurtinfo.LaagGeletterdheid;
 import org.springframework.stereotype.Component;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
+
+import java.text.DecimalFormat;
 import java.util.List;
 
 @Component
@@ -35,9 +39,6 @@ public class GWBLaaggeletterdheidConverter implements DataConverter{
         String wijk = wijkInfo[2];
         String buurtNaam = wijkInfo[3];
 
-        System.out.println(buurtNaam);
-        System.out.println(wijk);
-
         Buurt buurt = plaatsRepository.findBuurtByWijkAndBuurtNaam(wijk, buurtNaam).orElseThrow(() -> new RuntimeException("Buurt niet gevonden"));
 
         int totaalAantalHuishoudensTaalgroei = 0;
@@ -51,7 +52,7 @@ public class GWBLaaggeletterdheidConverter implements DataConverter{
             int NT1Taalgroeiers = Integer.parseInt((line[1]).split("\\.")[0]);
             totaalAantalHuishoudensTaalgroei += NT1Taalgroeiers;
 
-            double percentageNT1Taalgroeiers = Double.parseDouble(line[2].replace(",", "."));
+            double percentageNT1Taalgroeier = Double.parseDouble(line[2].replace(",", "."));
 
             int base = Integer.parseInt((line[3]).split("\\.")[0]);
             totaalAantalHuishoudens += base;
@@ -61,9 +62,13 @@ public class GWBLaaggeletterdheidConverter implements DataConverter{
             double percentagePenetratie = Double.parseDouble(line[6].replace(",", "."));
         }
 
-        LaagGeletterdheid geletterdheid = new LaagGeletterdheid(totaalAantalHuishoudens, totaalAantalHuishoudensTaalgroei);
+        double percentageTaalgroeiAfgerond = (double) totaalAantalHuishoudensTaalgroei / totaalAantalHuishoudens;
+        DecimalFormat df = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US));
+        percentageTaalgroeiAfgerond = Double.parseDouble(df.format(percentageTaalgroeiAfgerond));
+        LaagGeletterdheid geletterdheid = new LaagGeletterdheid(percentageTaalgroeiAfgerond);
 
         buurt.setLaagGeletterdheid(geletterdheid);
+        buurt.setAantalHuishoudens(totaalAantalHuishoudens);
         buurtRepository.save(buurt);
     }
 }

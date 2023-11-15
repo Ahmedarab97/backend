@@ -1,4 +1,4 @@
-package nl.penguins.learnditwin.dataconverter.filetypehandelaar;
+package nl.penguins.learnditwin.datatodomainconverter.filetypehandelaar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

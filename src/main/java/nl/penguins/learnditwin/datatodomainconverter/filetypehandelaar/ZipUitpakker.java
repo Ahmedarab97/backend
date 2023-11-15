@@ -1,4 +1,4 @@
-package nl.penguins.learnditwin.dataconverter.filetypehandelaar;
+package nl.penguins.learnditwin.datatodomainconverter.filetypehandelaar;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;

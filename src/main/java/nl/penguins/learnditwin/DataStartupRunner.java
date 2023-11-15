@@ -1,8 +1,11 @@
-package nl.penguins.learnditwin.dataconverter;
+package nl.penguins.learnditwin;
 
+import nl.penguins.learnditwin.datatodomainconverter.AlleCijfersGezondheidMonitorConverter;
+import nl.penguins.learnditwin.datatodomainconverter.GWBLaaggeletterdheidConverter;
+import nl.penguins.learnditwin.datatodomainconverter.GWBPostcode6Converter;
+import nl.penguins.learnditwin.datatofileconverter.ObjectToFileConverter;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -13,25 +16,29 @@ import java.util.Scanner;
 
 @Component
 public class DataStartupRunner implements CommandLineRunner {
-    GWBPostcode6Converter GWBPostcode6Converter;
+    nl.penguins.learnditwin.datatodomainconverter.GWBPostcode6Converter GWBPostcode6Converter;
     GWBLaaggeletterdheidConverter laaggeletterdheidConverter;
+    AlleCijfersGezondheidMonitorConverter alleCijfersGezondheidMonitorConverter;
+    ObjectToFileConverter objectToFileConverter;
 
-    public DataStartupRunner(GWBPostcode6Converter GWBPostcode6Converter, GWBLaaggeletterdheidConverter laaggeletterdheidConverter) {
+    public DataStartupRunner(GWBPostcode6Converter GWBPostcode6Converter, GWBLaaggeletterdheidConverter laaggeletterdheidConverter, AlleCijfersGezondheidMonitorConverter alleCijfersGezondheidMonitorConverter, ObjectToFileConverter objectToFileConverter) {
         this.GWBPostcode6Converter = GWBPostcode6Converter;
         this.laaggeletterdheidConverter = laaggeletterdheidConverter;
+        this.alleCijfersGezondheidMonitorConverter = alleCijfersGezondheidMonitorConverter;
+        this.objectToFileConverter = objectToFileConverter;
     }
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("Begin postcode data laden");
         GWBPostcode6Converter.convertData("data/Postcodes/GWB2022_pc6.zip");
-        System.out.println("Postcode data binnen");
 
         System.out.println("Begin laaggeletterdheid data laden");
         getPathFromFilesInMap("data/Laaggeletterdheid")
-                .stream()
                 .forEach(path -> laaggeletterdheidConverter.convertData(path));
         System.out.println("Laaggeletterdheid data binnen");
+
+        alleCijfersGezondheidMonitorConverter.convertData("data/allecijfers/gezondheidsmonitor-gemeente-nieuwegein.xlsx");
+//        objectToFileConverter.convertObjectenNaarExcel("Nieuwegein", "data");
     }
 
     private List<String> getPathFromFilesInMap(String mapPath) throws IOException {
