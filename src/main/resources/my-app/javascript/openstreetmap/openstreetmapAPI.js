@@ -15,12 +15,10 @@ export async function getCoordinatenVanOpenStreetMap(postcode) {
 
 export async function getCoordinatenVanGoogleMaps(buurtnaam) {
     return new Promise((resolve, reject) => {
-        // Vervang 'JOUW_API_SLEUTEL' door je eigen Google Cloud API-sleutel
         var apiKey = 'AIzaSyBNGXGaZGz4G7Pqz4SWctcSDKMnJ4kpaoc';
 
         var geocoder = new google.maps.Geocoder();
 
-        // Geocode API-aanroep om coördinaten te verkrijgen
         geocoder.geocode({'address': buurtnaam}, function(results, status) {
             if (status == 'OK') {
                 var location = results[0].geometry.location;
@@ -37,16 +35,6 @@ export async function getCoordinatenVanGoogleMaps(buurtnaam) {
         });
     });
 }
-
-// Voorbeeldgebruik:
-// getCoordinates('Amsterdam', function(coordinates) {
-//     if (coordinates) {
-//         console.log(`Coördinaten voor Amsterdam: ${coordinates.latitude}, ${coordinates.longitude}`);
-//     }
-// }
-
-
-
 
 // export async function getBoundingBoxForNeighborhood(neighborhoodName) {
 //     const query = `[out:json];
