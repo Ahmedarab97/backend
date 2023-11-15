@@ -1,4 +1,5 @@
 import { fromLonLat } from 'ol/proj';
+import {laaggeletterdheidLayer} from "../layers/laaggeltterdheidLayer";
 
 export async function getCoordinatenVanOpenStreetMap(postcode) {
     const geocodingUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${postcode}`;
@@ -11,6 +12,41 @@ export async function getCoordinatenVanOpenStreetMap(postcode) {
         return coordinates
     }
 }
+
+export async function getCoordinatenVanGoogleMaps(buurtnaam) {
+    return new Promise((resolve, reject) => {
+        // Vervang 'JOUW_API_SLEUTEL' door je eigen Google Cloud API-sleutel
+        var apiKey = 'AIzaSyBNGXGaZGz4G7Pqz4SWctcSDKMnJ4kpaoc';
+
+        var geocoder = new google.maps.Geocoder();
+
+        // Geocode API-aanroep om coördinaten te verkrijgen
+        geocoder.geocode({'address': buurtnaam}, function(results, status) {
+            if (status == 'OK') {
+                var location = results[0].geometry.location;
+                var latitude = location.lat();
+                var longitude = location.lng();
+                var coord = [longitude, latitude];
+                var transformedCoord = fromLonLat(coord);
+                console.log('Transformed Coordinates:', transformedCoord);
+                resolve(transformedCoord);
+            } else {
+                console.error(`Geen coördinaten gevonden voor ${buurtnaam}`);
+                reject(null);
+            }
+        });
+    });
+}
+
+// Voorbeeldgebruik:
+// getCoordinates('Amsterdam', function(coordinates) {
+//     if (coordinates) {
+//         console.log(`Coördinaten voor Amsterdam: ${coordinates.latitude}, ${coordinates.longitude}`);
+//     }
+// }
+
+
+
 
 // export async function getBoundingBoxForNeighborhood(neighborhoodName) {
 //     const query = `[out:json];
