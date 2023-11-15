@@ -7,6 +7,7 @@ import VectorLayer from "ol/layer/Vector";
 import {Point} from "ol/geom";
 import Feature from "ol/Feature";
 import {Heatmap} from "ol/layer";
+import {bolletjesLayer} from "./javascript/layers/bolletjes";
 
 var coordinates = [
   [5.0908, 52.0305],
@@ -30,7 +31,7 @@ let map = new Map({
 
 
 window.addMarker = async function() {
-  let layer2 = await laaggeletterdheidLayer(["Park Oudegein"]);
+  let layer2 = await bolletjesLayer();
   map.addLayer(layer2);
   console.log(map.getAllLayers());
 }
