@@ -83,24 +83,24 @@ export async function bolletjesLayer() {
         }
         let size = 0;
         if (point.cijfer <= 5) {
+            size += 15;
+        }
+        else if (point.cijfer <= 10) {
+            size += 20;
+        }
+        else if (point.cijfer <= 12) {
             size += 25;
         }
-        else if (point.cijfer > 5 <= 10) {
+        else if (point.cijfer <= 15) {
+            size += 30;
+        }
+        else if (point.cijfer <= 17) {
             size += 35;
         }
-        else if (point.cijfer > 10 <= 12) {
-            size += 45;
-        }
-        else if (point.cijfer > 12 <= 15) {
-            size += 55;
-        }
-        else if (point.cijfer > 15 <= 17) {
-            size += 65;
-        }
-        else if (point.cijfer > 17 <= 20) {
-            size += 75;
+        else if (point.cijfer <= 20) {
+            size += 40;
         } else {
-            size += 90;
+            size += 45;
         }
 
         var feature = new Feature({
