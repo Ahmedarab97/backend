@@ -6,6 +6,7 @@ import nl.penguins.learnditwin.plaats.data.PlaatsRepository;
 import nl.penguins.learnditwin.plaats.domain.Buurt;
 import nl.penguins.learnditwin.plaats.domain.buurtinfo.LaagGeletterdheid;
 import org.springframework.stereotype.Component;
+
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
@@ -14,7 +15,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 @Component
-public class GWBLaaggeletterdheidConverter implements DataConverter{
+public class GWBLaaggeletterdheidConverter implements DataConverter {
     private final ExcelHandelaar fileHandler;
     private final BuurtRepository buurtRepository;
     private final PlaatsRepository plaatsRepository;
@@ -29,8 +30,6 @@ public class GWBLaaggeletterdheidConverter implements DataConverter{
     public void convertData(String path) {
         List<String[]> laaggeletterdheidData = fileHandler.readData(path, 0);
         List<String[]> wijkInfoSheet = fileHandler.readData(path, 1);
-        // aantal huishoudens
-        // aantal huishoudens met taalgroei
 
         String[] wijkInfo = wijkInfoSheet.get(0);
 
@@ -44,19 +43,20 @@ public class GWBLaaggeletterdheidConverter implements DataConverter{
         int totaalAantalHuishoudensTaalgroei = 0;
         int totaalAantalHuishoudens = 0;
 
-        for (int i = 0; i < 11 ; i++){
+        for (int i = 0; i < 11; i++) {
             String[] line = laaggeletterdheidData.get(i);
 
-            String whizeSegmant = line[0];
 
             int NT1Taalgroeiers = Integer.parseInt((line[1]).split("\\.")[0]);
             totaalAantalHuishoudensTaalgroei += NT1Taalgroeiers;
 
-            double percentageNT1Taalgroeier = Double.parseDouble(line[2].replace(",", "."));
 
             int base = Integer.parseInt((line[3]).split("\\.")[0]);
             totaalAantalHuishoudens += base;
 
+            // Deze informatie is alleen nodig als we de whizeSegmant erin willen verwerken
+            String whizeSegmant = line[0];
+            double percentageNT1Taalgroeier = Double.parseDouble(line[2].replace(",", "."));
             double basePercentage = Double.parseDouble(line[4].replace(",", "."));
             double index = Double.parseDouble(line[5].replace(",", "."));
             double percentagePenetratie = Double.parseDouble(line[6].replace(",", "."));

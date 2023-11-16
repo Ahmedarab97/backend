@@ -3,31 +3,32 @@ package nl.penguins.learnditwin.datatodomainconverter;
 import nl.penguins.learnditwin.datatodomainconverter.filetypehandelaar.ExcelHandelaar;
 import nl.penguins.learnditwin.plaats.data.BuurtRepository;
 import nl.penguins.learnditwin.plaats.domain.Buurt;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-public class AlleCijfersGezondheidMonitorConverter implements DataConverter{
-    ExcelHandelaar excelHandelaar;
-    @Autowired
-    BuurtRepository buurtRepository;
-    public AlleCijfersGezondheidMonitorConverter(ExcelHandelaar excelHandelaar) {
+public class AlleCijfersGezondheidMonitorConverter implements DataConverter {
+    private final ExcelHandelaar excelHandelaar;
+    private final BuurtRepository buurtRepository;
+
+    public AlleCijfersGezondheidMonitorConverter(ExcelHandelaar excelHandelaar, BuurtRepository buurtRepository) {
         this.excelHandelaar = excelHandelaar;
+        this.buurtRepository = buurtRepository;
     }
 
     @Override
     public void convertData(String path) {
         List<String[]> dataRegels = excelHandelaar.readData(path, 2);
 
-        for (String[] regel : dataRegels){
+        for (String[] regel : dataRegels) {
             String regioCode = regel[0];
             String regioNaam = regel[1];
             String soortRegio = regel[2];
 
             // TODO: we kunnen er nog voor kiezen om dit ook op te slaan op Gemeente en Wijk niveau -> voor verband
-            if(soortRegio.equals("Buurt")){
+            if (soortRegio.equals("Buurt")) {
                 Buurt buurt = buurtRepository.findById(regioCode).orElseThrow(() -> new RuntimeException("Buurt niet gevonden"));
                 // HIER BEGINT ALCOHOL GEBRUIK
                 double voldoetAanAlcoholRichtlijn = Double.parseDouble(regel[3]);
@@ -92,8 +93,6 @@ public class AlleCijfersGezondheidMonitorConverter implements DataConverter{
 
                 buurtRepository.save(buurt);
             }
-
         }
-
     }
 }

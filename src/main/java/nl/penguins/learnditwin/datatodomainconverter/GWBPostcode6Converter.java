@@ -13,15 +13,18 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 @Component
-public class GWBPostcode6Converter implements DataConverter{
-    @Autowired
-    private ExcelHandelaar fileHandler;
-    @Autowired
-    BuurtRepository buurtRepository;
-    @Autowired
-    PlaatsRepository plaatsRepository;
-    @Autowired
-    GemeenteRepository gemeenteRepository;
+public class GWBPostcode6Converter implements DataConverter {
+    private final ExcelHandelaar fileHandler;
+    private final BuurtRepository buurtRepository;
+    private final PlaatsRepository plaatsRepository;
+    private final GemeenteRepository gemeenteRepository;
+
+    public GWBPostcode6Converter(ExcelHandelaar fileHandler, BuurtRepository buurtRepository, PlaatsRepository plaatsRepository, GemeenteRepository gemeenteRepository) {
+        this.fileHandler = fileHandler;
+        this.buurtRepository = buurtRepository;
+        this.plaatsRepository = plaatsRepository;
+        this.gemeenteRepository = gemeenteRepository;
+    }
 
     @Override
     public void convertData(String path) {
@@ -29,7 +32,7 @@ public class GWBPostcode6Converter implements DataConverter{
 
         List<String[]> lineParts = fileHandler.readData(path, 0);
 
-        try{
+        try {
             Set<Gemeente> gemeentes = new HashSet<>();
             Set<Wijk> wijken = new HashSet<>();
             Set<Buurt> buurten = new HashSet<>();
@@ -38,7 +41,7 @@ public class GWBPostcode6Converter implements DataConverter{
                 String gemeenteCode = line[0];
                 String gemeenteNaam = line[1];
 
-                if (gemeenteNaam.equals("Nieuwegein")){
+                if (gemeenteNaam.equals("Nieuwegein")) {
                     String wijkCode = line[2];
                     String wijkNaam = line[3];
                     String buurtCode = line[4];
@@ -63,7 +66,7 @@ public class GWBPostcode6Converter implements DataConverter{
             plaatsRepository.saveAll(wijken);
             buurtRepository.saveAll(buurten);
             gemeenteRepository.saveAll(gemeentes);
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         } finally {
             System.out.println("Postcode data binnen");

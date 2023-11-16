@@ -11,14 +11,14 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Component
-public class ExcelHandelaar extends FileHandelaar{
+public class ExcelHandelaar extends FileHandelaar {
     @Override
     public List<String[]> readData(String path, int optioneelSheetNummer) {
         try {
             ClassPathResource resource = new ClassPathResource(path);
             InputStream optioneelInputStream = super.zipUitpakker.getInputStreamVanZipMogelijkeZip(resource);
 
-            if (optioneelInputStream == null){
+            if (optioneelInputStream == null) {
                 optioneelInputStream = resource.getInputStream();
             }
             Workbook workbook = WorkbookFactory.create(optioneelInputStream);
@@ -34,13 +34,13 @@ public class ExcelHandelaar extends FileHandelaar{
                                 } else if (cell.getCellType() == CellType.STRING) {
                                     return cell.getStringCellValue();
                                 } else {
-                                    return ""; // Voeg hier logica toe voor andere celtypen indien nodig
+                                    return "";
                                 }
                             })
                             .toArray(String[]::new))
                     .collect(Collectors.toList());
-            } catch (IOException e){
-                return null;
+        } catch (IOException e) {
+            return null;
         }
     }
 }

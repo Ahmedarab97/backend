@@ -20,12 +20,12 @@ public class ObjectToFileConverter {
         this.gemeenteRepository = gemeenteRepository;
     }
 
-    public void convertObjectenNaarExcel(String gemeenteNaam, String locatieOpslaan){
+    public void convertObjectenNaarExcel(String gemeenteNaam, String locatieOpslaan) {
         Gemeente gemeente = gemeenteRepository.findByNaam(gemeenteNaam).orElseThrow(() -> new RuntimeException("gemeente niet gevonden"));
 
         Set<Wijk> wijken = gemeente.getWijken();
 
-        try{
+        try {
             Workbook workbook = new XSSFWorkbook();
             FileOutputStream fileOutputStream = new FileOutputStream(locatieOpslaan + "gecombineerde-data.xlsx");
 
@@ -98,125 +98,124 @@ public class ObjectToFileConverter {
             headerRow.createCell(39).setCellValue("percentageRokers");
 
 
-
             AtomicInteger indexExcel = new AtomicInteger(1);
             wijken.forEach(wijk -> {
-                        wijk.getBuurten()
-                                .forEach(buurt -> {
-                                    Row row = sheet.createRow(indexExcel.getAndIncrement());
+                wijk.getBuurten()
+                        .forEach(buurt -> {
+                            Row row = sheet.createRow(indexExcel.getAndIncrement());
 
-                                    row.createCell(0).setCellValue(wijk.getWijkCode_id());
-                                    row.createCell(1).setCellValue(wijk.getPostcode4());
-                                    row.createCell(2).setCellValue(wijk.getNaam());
+                            row.createCell(0).setCellValue(wijk.getWijkCode_id());
+                            row.createCell(1).setCellValue(wijk.getPostcode4());
+                            row.createCell(2).setCellValue(wijk.getNaam());
 
-                                    row.createCell(3).setCellValue(buurt.getBuurtCode_id());
-                                    row.createCell(4).setCellValue(buurt.getNaam());
-                                    row.createCell(5).setCellValue(buurt.getPostcode6().toString());
-                                    row.createCell(6).setCellValue(buurt.getAantalHuishoudens());
+                            row.createCell(3).setCellValue(buurt.getBuurtCode_id());
+                            row.createCell(4).setCellValue(buurt.getNaam());
+                            row.createCell(5).setCellValue(buurt.getPostcode6().toString());
+                            row.createCell(6).setCellValue(buurt.getAantalHuishoudens());
 
-                                    for (int i = 6; i <= 39; i++) {
-                                        int cellIndex = i;
+                            for (int i = 6; i <= 39; i++) {
+                                int cellIndex = i;
 
-                                        Optional.ofNullable(buurt.getLaagGeletterdheid())
-                                                .map(laagGeletterdheid -> switch (cellIndex){
-                                                    case 7 -> laagGeletterdheid.percentageTaalgroei();
-                                                    default -> null;
-                                                }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
+                                Optional.ofNullable(buurt.getLaagGeletterdheid())
+                                        .map(laagGeletterdheid -> switch (cellIndex) {
+                                            case 7 -> laagGeletterdheid.percentageTaalgroei();
+                                            default -> null;
+                                        }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
 
-                                        Optional.ofNullable(buurt.getAlcoholGebruik())
-                                                .map(alcoholGebruik -> switch (cellIndex){
-                                                    case 8 -> alcoholGebruik.percentageVoldoetAanAlcoholRichtlijn();
-                                                    case 9 -> alcoholGebruik.percentageDrinker();
-                                                    case 10 -> alcoholGebruik.percentageZwareDrinker();
-                                                    case 11 -> alcoholGebruik.percentageOvermatigeDrinker();
-                                                    default -> null;
-                                                }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
+                                Optional.ofNullable(buurt.getAlcoholGebruik())
+                                        .map(alcoholGebruik -> switch (cellIndex) {
+                                            case 8 -> alcoholGebruik.percentageVoldoetAanAlcoholRichtlijn();
+                                            case 9 -> alcoholGebruik.percentageDrinker();
+                                            case 10 -> alcoholGebruik.percentageZwareDrinker();
+                                            case 11 -> alcoholGebruik.percentageOvermatigeDrinker();
+                                            default -> null;
+                                        }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
-                                        Optional.ofNullable(buurt.getBewegen())
-                                                .map(bewegen -> switch (cellIndex){
-                                                    case 12 -> bewegen.percentageVoldoetAanBeweegRichtlijn();
-                                                    case 13 -> bewegen.percentageWekelijkseSporter();
-                                                    default -> null;
-                                                }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
+                                Optional.ofNullable(buurt.getBewegen())
+                                        .map(bewegen -> switch (cellIndex) {
+                                            case 12 -> bewegen.percentageVoldoetAanBeweegRichtlijn();
+                                            case 13 -> bewegen.percentageWekelijkseSporter();
+                                            default -> null;
+                                        }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
-                                        Optional.ofNullable(buurt.getFinancieel())
-                                                .map(financieel -> switch (cellIndex){
-                                                    case 14 -> financieel.percentageMoeiteMetRondkomen();
-                                                    default -> null;
-                                                }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
+                                Optional.ofNullable(buurt.getFinancieel())
+                                        .map(financieel -> switch (cellIndex) {
+                                            case 14 -> financieel.percentageMoeiteMetRondkomen();
+                                            default -> null;
+                                        }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
-                                        Optional.ofNullable(buurt.getGeluidshinder())
-                                                .map(financieel -> switch (cellIndex){
-                                                    case 15 -> financieel.percentageErnstigeGeluidhinderDoorBuren();
-                                                    default -> null;
-                                                }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
+                                Optional.ofNullable(buurt.getGeluidshinder())
+                                        .map(financieel -> switch (cellIndex) {
+                                            case 15 -> financieel.percentageErnstigeGeluidhinderDoorBuren();
+                                            default -> null;
+                                        }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
-                                        Optional.ofNullable(buurt.getGewicht())
-                                                .map(gewicht -> switch (cellIndex) {
-                                                    case 16 -> gewicht.percentageOndergewicht();
-                                                    case 17 -> gewicht.percentageNormaalGewicht();
-                                                    case 18 -> gewicht.percentageOvergewicht();
-                                                    case 19 -> gewicht.percentageErnstigOvergewicht();
-                                                    default -> null;
-                                                }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
-                                        Optional.ofNullable(buurt.getGezondheid())
-                                                .map(gezondheid -> switch (cellIndex) {
-                                                    case 20 -> gezondheid.percentageGoedOfZeerErvarenGezondheid();
-                                                    default -> null;
-                                                }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
+                                Optional.ofNullable(buurt.getGewicht())
+                                        .map(gewicht -> switch (cellIndex) {
+                                            case 16 -> gewicht.percentageOndergewicht();
+                                            case 17 -> gewicht.percentageNormaalGewicht();
+                                            case 18 -> gewicht.percentageOvergewicht();
+                                            case 19 -> gewicht.percentageErnstigOvergewicht();
+                                            default -> null;
+                                        }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
+                                Optional.ofNullable(buurt.getGezondheid())
+                                        .map(gezondheid -> switch (cellIndex) {
+                                            case 20 -> gezondheid.percentageGoedOfZeerErvarenGezondheid();
+                                            default -> null;
+                                        }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
-                                        Optional.ofNullable(buurt.getLichamelijkeBeperkingOfAandoening())
-                                                .map(aandoening -> switch (cellIndex) {
-                                                    case 21 -> aandoening.percentageEenOfMeerLangdurigeAandoeningen();
-                                                    case 22 -> aandoening.percentageBeperktVanwegeGezondheid();
-                                                    case 23 -> aandoening.percentageErnstigBeperktVanwegeGezondheid();
-                                                    case 24 -> aandoening.percentageLangdurigeZiekteEnBeperkt();
-                                                    case 25 -> aandoening.percentageGehoorBeperking();
-                                                    case 26 -> aandoening.percentageGezichtBeperking();
-                                                    case 27 -> aandoening.percentageMobiliteitBeperking();
-                                                    case 28 -> aandoening.percentageEenOfMeerLichamelijkeBeperkingen();
-                                                    default -> null;
-                                                }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
+                                Optional.ofNullable(buurt.getLichamelijkeBeperkingOfAandoening())
+                                        .map(aandoening -> switch (cellIndex) {
+                                            case 21 -> aandoening.percentageEenOfMeerLangdurigeAandoeningen();
+                                            case 22 -> aandoening.percentageBeperktVanwegeGezondheid();
+                                            case 23 -> aandoening.percentageErnstigBeperktVanwegeGezondheid();
+                                            case 24 -> aandoening.percentageLangdurigeZiekteEnBeperkt();
+                                            case 25 -> aandoening.percentageGehoorBeperking();
+                                            case 26 -> aandoening.percentageGezichtBeperking();
+                                            case 27 -> aandoening.percentageMobiliteitBeperking();
+                                            case 28 -> aandoening.percentageEenOfMeerLichamelijkeBeperkingen();
+                                            default -> null;
+                                        }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
-                                        Optional.ofNullable(buurt.getMentaleProblemen())
-                                                .map(problemen -> switch (cellIndex) {
-                                                    case 29 -> problemen.percentageMatigOfHoogRisicoOpAngstOfDepressie();
-                                                    case 30 -> problemen.percentageHoogRisicoOpAngstOfDepressie();
-                                                    case 31 -> problemen.percentageVeelStressInAfgelopen4Weken();
-                                                    case 32 -> problemen.percentageEenzaam();
-                                                    case 33 -> problemen.percentageErnstigOfZeerEenzaam();
-                                                    case 34 -> problemen.percentageEmotioneelEenzaam();
-                                                    case 35 -> problemen.percentageSociaalEenzaam();
-                                                    default -> null;
-                                                }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
+                                Optional.ofNullable(buurt.getMentaleProblemen())
+                                        .map(problemen -> switch (cellIndex) {
+                                            case 29 -> problemen.percentageMatigOfHoogRisicoOpAngstOfDepressie();
+                                            case 30 -> problemen.percentageHoogRisicoOpAngstOfDepressie();
+                                            case 31 -> problemen.percentageVeelStressInAfgelopen4Weken();
+                                            case 32 -> problemen.percentageEenzaam();
+                                            case 33 -> problemen.percentageErnstigOfZeerEenzaam();
+                                            case 34 -> problemen.percentageEmotioneelEenzaam();
+                                            case 35 -> problemen.percentageSociaalEenzaam();
+                                            default -> null;
+                                        }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
-                                        Optional.ofNullable(buurt.getOndersteuning())
-                                                .map(ondersteuning -> switch (cellIndex) {
-                                                    case 36 -> ondersteuning.percentageVrijwilligersWerk();
-                                                    case 37 -> ondersteuning.percentageMantelZorger();
-                                                    default -> null;
-                                                }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
+                                Optional.ofNullable(buurt.getOndersteuning())
+                                        .map(ondersteuning -> switch (cellIndex) {
+                                            case 36 -> ondersteuning.percentageVrijwilligersWerk();
+                                            case 37 -> ondersteuning.percentageMantelZorger();
+                                            default -> null;
+                                        }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
-                                        Optional.ofNullable(buurt.getRegieOverEigenLeven())
-                                                .map(regie -> switch (cellIndex) {
-                                                    case 38 -> regie.percentageMatigOfVeelRegieOverEigenLeven();
-                                                    default -> null;
-                                                }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
+                                Optional.ofNullable(buurt.getRegieOverEigenLeven())
+                                        .map(regie -> switch (cellIndex) {
+                                            case 38 -> regie.percentageMatigOfVeelRegieOverEigenLeven();
+                                            default -> null;
+                                        }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
-                                        Optional.ofNullable(buurt.getRoken())
-                                                .map(roken -> switch (cellIndex) {
-                                                    case 39 -> roken.percentageRokers();
-                                                    default -> null;
-                                                }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
+                                Optional.ofNullable(buurt.getRoken())
+                                        .map(roken -> switch (cellIndex) {
+                                            case 39 -> roken.percentageRokers();
+                                            default -> null;
+                                        }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
-                                        }
-                                });
-                        indexExcel.getAndIncrement();
-                    });
+                            }
+                        });
+                indexExcel.getAndIncrement();
+            });
             workbook.write(fileOutputStream);
             System.out.println("Excel-bestand succesvol aangemaakt op locatie: " + locatieOpslaan);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
