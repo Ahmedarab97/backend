@@ -2,7 +2,7 @@ package nl.penguins.learnditwin.datatodomainconverter;
 
 import nl.penguins.learnditwin.datatodomainconverter.filetypehandelaar.ExcelHandelaar;
 import nl.penguins.learnditwin.plaats.data.BuurtRepository;
-import nl.penguins.learnditwin.plaats.data.PlaatsRepository;
+import nl.penguins.learnditwin.plaats.data.WijkRepository;
 import nl.penguins.learnditwin.plaats.domain.Buurt;
 import nl.penguins.learnditwin.plaats.domain.buurtinfo.LaagGeletterdheid;
 import org.springframework.stereotype.Component;
@@ -18,12 +18,12 @@ import java.util.List;
 public class GWBLaaggeletterdheidConverter implements DataConverter {
     private final ExcelHandelaar fileHandler;
     private final BuurtRepository buurtRepository;
-    private final PlaatsRepository plaatsRepository;
+    private final WijkRepository wijkRepository;
 
-    public GWBLaaggeletterdheidConverter(ExcelHandelaar fileHandler, BuurtRepository buurtRepository, PlaatsRepository plaatsRepository) {
+    public GWBLaaggeletterdheidConverter(ExcelHandelaar fileHandler, BuurtRepository buurtRepository, WijkRepository wijkRepository) {
         this.fileHandler = fileHandler;
         this.buurtRepository = buurtRepository;
-        this.plaatsRepository = plaatsRepository;
+        this.wijkRepository = wijkRepository;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class GWBLaaggeletterdheidConverter implements DataConverter {
         String wijk = wijkInfo[2];
         String buurtNaam = wijkInfo[3];
 
-        Buurt buurt = plaatsRepository.findBuurtByWijkAndBuurtNaam(wijk, buurtNaam).orElseThrow(() -> new RuntimeException("Buurt niet gevonden"));
+        Buurt buurt = wijkRepository.findBuurtByWijkAndBuurtNaam(wijk, buurtNaam).orElseThrow(() -> new RuntimeException("Buurt niet gevonden"));
 
         int totaalAantalHuishoudensTaalgroei = 0;
         int totaalAantalHuishoudens = 0;

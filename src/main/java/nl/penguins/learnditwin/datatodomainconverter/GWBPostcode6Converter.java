@@ -3,11 +3,10 @@ package nl.penguins.learnditwin.datatodomainconverter;
 import nl.penguins.learnditwin.datatodomainconverter.filetypehandelaar.ExcelHandelaar;
 import nl.penguins.learnditwin.plaats.data.BuurtRepository;
 import nl.penguins.learnditwin.plaats.data.GemeenteRepository;
-import nl.penguins.learnditwin.plaats.data.PlaatsRepository;
+import nl.penguins.learnditwin.plaats.data.WijkRepository;
 import nl.penguins.learnditwin.plaats.domain.Buurt;
 import nl.penguins.learnditwin.plaats.domain.Gemeente;
 import nl.penguins.learnditwin.plaats.domain.Wijk;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -16,13 +15,13 @@ import java.util.*;
 public class GWBPostcode6Converter implements DataConverter {
     private final ExcelHandelaar fileHandler;
     private final BuurtRepository buurtRepository;
-    private final PlaatsRepository plaatsRepository;
+    private final WijkRepository wijkRepository;
     private final GemeenteRepository gemeenteRepository;
 
-    public GWBPostcode6Converter(ExcelHandelaar fileHandler, BuurtRepository buurtRepository, PlaatsRepository plaatsRepository, GemeenteRepository gemeenteRepository) {
+    public GWBPostcode6Converter(ExcelHandelaar fileHandler, BuurtRepository buurtRepository, WijkRepository wijkRepository, GemeenteRepository gemeenteRepository) {
         this.fileHandler = fileHandler;
         this.buurtRepository = buurtRepository;
-        this.plaatsRepository = plaatsRepository;
+        this.wijkRepository = wijkRepository;
         this.gemeenteRepository = gemeenteRepository;
     }
 
@@ -63,7 +62,7 @@ public class GWBPostcode6Converter implements DataConverter {
                 }
             });
 
-            plaatsRepository.saveAll(wijken);
+            wijkRepository.saveAll(wijken);
             buurtRepository.saveAll(buurten);
             gemeenteRepository.saveAll(gemeentes);
         } catch (Exception e) {

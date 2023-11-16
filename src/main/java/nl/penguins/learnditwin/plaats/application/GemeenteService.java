@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class PlaatsService {
+public class GemeenteService {
     private final GemeenteRepository gemeenteRepository;
 
-    public PlaatsService(GemeenteRepository gemeenteRepository) {
+    public GemeenteService(GemeenteRepository gemeenteRepository) {
         this.gemeenteRepository = gemeenteRepository;
     }
 

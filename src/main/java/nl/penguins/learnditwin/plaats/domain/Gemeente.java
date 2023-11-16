@@ -14,7 +14,7 @@ public class Gemeente {
     @MongoId(FieldType.STRING)
     @Field("wijkCode_id")
     @Indexed(unique = true)
-    private String gemeenteCode_id;
+    private final String gemeenteCode_id;
     private String naam;
     @DBRef
     private Set<Wijk> wijken;
@@ -29,15 +29,11 @@ public class Gemeente {
         return gemeenteCode_id;
     }
 
-    public String getNaam() {
-        return naam;
-    }
-
     public Set<Wijk> getWijken() {
         return wijken;
     }
 
-    public void voegWijkToe(Wijk wijk){
+    public void voegWijkToe(Wijk wijk) {
         wijken.add(wijk);
     }
 }
