@@ -48,9 +48,9 @@ public class GWBPostcode6Converter implements DataConverter {
                     String postCode6 = line[6];
                     String postCode4 = postCode6.substring(0, 4);
 
-                    Wijk opgeslagenWijk = wijken.parallelStream().filter(wijk -> wijk.getWijkCode_id().equals(wijkCode)).findFirst().orElse(new Wijk(wijkCode, wijkNaam, postCode4));
-                    Buurt opgeslagenBuurt = buurten.parallelStream().filter(buurt -> buurt.getBuurtCode_id().equals(buurtCode)).findFirst().orElse(new Buurt(buurtCode, buurtNaam));
-                    Gemeente opgeslagenGemeente = gemeentes.parallelStream().filter(gemeente -> gemeente.getGemeenteCode_id().equals(gemeenteCode)).findFirst().orElse(new Gemeente(gemeenteCode, gemeenteNaam));
+                    Wijk opgeslagenWijk = wijken.parallelStream().filter(wijk -> wijk.getRegioCode_id().equals(wijkCode)).findFirst().orElse(new Wijk(wijkCode, wijkNaam, postCode4));
+                    Buurt opgeslagenBuurt = buurten.parallelStream().filter(buurt -> buurt.getRegioCode_id().equals(buurtCode)).findFirst().orElse(new Buurt(buurtCode, buurtNaam));
+                    Gemeente opgeslagenGemeente = gemeentes.parallelStream().filter(gemeente -> gemeente.getRegioCode_id().equals(gemeenteCode)).findFirst().orElse(new Gemeente(gemeenteCode, gemeenteNaam));
 
                     opgeslagenBuurt.addStraat(postCode6);
                     opgeslagenWijk.addBuurt(opgeslagenBuurt);

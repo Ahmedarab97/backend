@@ -2,6 +2,7 @@ package nl.penguins.learnditwin.datatofileconverter;
 
 import nl.penguins.learnditwin.plaats.data.GemeenteRepository;
 import nl.penguins.learnditwin.plaats.domain.Gemeente;
+import nl.penguins.learnditwin.plaats.domain.Locatie;
 import nl.penguins.learnditwin.plaats.domain.Wijk;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -21,7 +22,7 @@ public class ObjectToFileConverter {
     }
 
     public void convertObjectenNaarExcel(String gemeenteNaam, String locatieOpslaan) {
-        Gemeente gemeente = gemeenteRepository.findByNaam(gemeenteNaam).orElseThrow(() -> new RuntimeException("gemeente niet gevonden"));
+        Gemeente gemeente = gemeenteRepository.findByNaam(gemeenteNaam).orElseThrow();
 
         Set<Wijk> wijken = gemeente.getWijken();
 
@@ -104,14 +105,14 @@ public class ObjectToFileConverter {
                         .forEach(buurt -> {
                             Row row = sheet.createRow(indexExcel.getAndIncrement());
 
-                            row.createCell(0).setCellValue(wijk.getWijkCode_id());
+                            row.createCell(0).setCellValue(wijk.getRegioCode_id());
                             row.createCell(1).setCellValue(wijk.getPostcode4());
                             row.createCell(2).setCellValue(wijk.getNaam());
 
-                            row.createCell(3).setCellValue(buurt.getBuurtCode_id());
+                            row.createCell(3).setCellValue(buurt.getRegioCode_id());
                             row.createCell(4).setCellValue(buurt.getNaam());
                             row.createCell(5).setCellValue(buurt.getPostcode6().toString());
-                            row.createCell(6).setCellValue(buurt.getAantalHuishoudens());
+                            row.createCell(6).setCellValue(buurt.getRegioCode_id());
 
                             for (int i = 6; i <= 39; i++) {
                                 int cellIndex = i;

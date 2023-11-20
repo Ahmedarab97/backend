@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public interface GemeenteRepository extends MongoRepository<Gemeente, String> {
     Optional<Gemeente> findByNaam(String naam);
