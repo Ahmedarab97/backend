@@ -29,7 +29,7 @@ public class AlleCijfersGezondheidMonitorConverter implements DataConverter {
 
     @Override
     public void convertData(String path) {
-        List<String[]> dataRegels = excelHandelaar.readData(path, 2);
+        List<String[]> dataRegels = excelHandelaar.readData(path, 1,2);
 
         for (String[] regel : dataRegels) {
             String regioCode = regel[0];

@@ -15,8 +15,8 @@ public class Buurt extends Locatie {
         super();
     }
 
-    public Buurt(String buurtCode_id, String naam) {
-        super(buurtCode_id, naam);
+    public Buurt(String regioCode_id, String naam) {
+        super(regioCode_id, naam);
         this.postcode6 = new ArrayList<>();
     }
 

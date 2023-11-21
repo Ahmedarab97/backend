@@ -25,8 +25,7 @@ public class ExcelHandelaar extends FileHandelaar {
 
             Sheet sheet = workbook.getSheetAt(optioneelSheetNummer);
 
-            return StreamSupport.stream(sheet.spliterator(), false)
-                    .skip(1)
+            List<String[]> ongefilterdeRijen = StreamSupport.stream(sheet.spliterator(), false)
                     .map(row -> StreamSupport.stream(row.spliterator(), false)
                             .map(cell -> {
                                 if (cell.getCellType() == CellType.NUMERIC) {
@@ -37,11 +36,26 @@ public class ExcelHandelaar extends FileHandelaar {
                                     return "";
                                 }
                             })
-                            .toArray(String[]::new))
-                    .collect(Collectors.toList());
+                            .toArray(String[]::new)).toList();
+            return ongefilterdeRijen;
+            // TODO sublist()
         } catch (IOException e) {
             return null;
         }
+    }
+
+    @Override
+    public List<String[]> readData(String path, int van, int tot, int optioneelSheetNummer) {
+        List<String[]> ongefilterdeData = readData(path, optioneelSheetNummer);
+
+        return ongefilterdeData.subList(van, tot);
+    }
+
+    @Override
+    public List<String[]> readData(String path, int vanaf, int optioneelSheetNummer) {
+        List<String[]> ongefilterdeData = readData(path, optioneelSheetNummer);
+
+        return ongefilterdeData.subList(vanaf, ongefilterdeData.size());
     }
 }
 

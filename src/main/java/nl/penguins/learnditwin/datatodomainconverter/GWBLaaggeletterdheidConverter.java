@@ -28,8 +28,8 @@ public class GWBLaaggeletterdheidConverter implements DataConverter {
 
     @Override
     public void convertData(String path) {
-        List<String[]> laaggeletterdheidData = fileHandler.readData(path, 0);
-        List<String[]> wijkInfoSheet = fileHandler.readData(path, 1);
+        List<String[]> laaggeletterdheidData = fileHandler.readData(path, 1, 12, 0);
+        List<String[]> wijkInfoSheet = fileHandler.readData(path, 1, 1);
 
         String[] wijkInfo = wijkInfoSheet.get(0);
 
@@ -43,10 +43,7 @@ public class GWBLaaggeletterdheidConverter implements DataConverter {
         int totaalAantalHuishoudensTaalgroei = 0;
         int totaalAantalHuishoudens = 0;
 
-        for (int i = 0; i < 11; i++) {
-            String[] line = laaggeletterdheidData.get(i);
-
-
+        for (String[] line : laaggeletterdheidData) {
             int NT1Taalgroeiers = Integer.parseInt((line[1]).split("\\.")[0]);
             totaalAantalHuishoudensTaalgroei += NT1Taalgroeiers;
 

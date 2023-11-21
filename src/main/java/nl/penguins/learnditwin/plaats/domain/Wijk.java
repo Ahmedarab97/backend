@@ -11,11 +11,15 @@ import java.util.Set;
 
 @Document("wijk")
 public class Wijk extends Locatie{
-    private String postcode4;
+    private final String postcode4;
     @DBRef
-    private Set<Buurt> buurten = new HashSet<>();
+    private Set<Buurt> buurten;
 
-    protected Wijk(){}
+    public Wijk(String regioCode_id, String naam, String postcode4) {
+        super(regioCode_id, naam);
+        this.postcode4 = postcode4;
+        this.buurten = new HashSet<>();
+    }
 
     @Override
     public int getAantalInwoners() {
@@ -44,12 +48,6 @@ public class Wijk extends Locatie{
         percentageTaalgroei = Double.parseDouble(df.format(percentageTaalgroei));
         return new LaagGeletterdheid(percentageTaalgroei);
     }
-
-    public Wijk(String wijkCode, String naam, String postcode4) {
-        super(wijkCode, naam);
-        this.postcode4 = postcode4;
-    }
-
     public void addBuurt(Buurt buurt) {
         this.buurten.add(buurt);
     }
