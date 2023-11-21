@@ -1,4 +1,5 @@
 import { fromLonLat } from 'ol/proj';
+import {laaggeletterdheidLayer} from "../layers/laaggeltterdheidLayer";
 
 export async function getCoordinatenVanOpenStreetMap(postcode) {
     const geocodingUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${postcode}`;
@@ -10,6 +11,29 @@ export async function getCoordinatenVanOpenStreetMap(postcode) {
         coordinates = fromLonLat([parseFloat(result.lon), parseFloat(result.lat)]);
         return coordinates
     }
+}
+
+export async function getCoordinatenVanGoogleMaps(buurtnaam) {
+    return new Promise((resolve, reject) => {
+        var apiKey = 'AIzaSyBNGXGaZGz4G7Pqz4SWctcSDKMnJ4kpaoc';
+
+        var geocoder = new google.maps.Geocoder();
+
+        geocoder.geocode({'address': buurtnaam}, function(results, status) {
+            if (status == 'OK') {
+                var location = results[0].geometry.location;
+                var latitude = location.lat();
+                var longitude = location.lng();
+                var coord = [longitude, latitude];
+                var transformedCoord = fromLonLat(coord);
+                console.log('Transformed Coordinates:', transformedCoord);
+                resolve(transformedCoord);
+            } else {
+                console.error(`Geen coördinaten gevonden voor ${buurtnaam}`);
+                reject(null);
+            }
+        });
+    });
 }
 
 // export async function getBoundingBoxForNeighborhood(neighborhoodName) {

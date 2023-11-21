@@ -7,36 +7,51 @@ import {Circle, Point} from 'ol/geom';
 
 import { Vector as VectorLayer } from 'ol/layer';
 import {Heatmap} from 'ol/layer'
-import {getCoordinatenVanOpenStreetMap} from "../openstreetmap/openstreetmapAPI";
+import {getCoordinatenVanGoogleMaps, getCoordinatenVanOpenStreetMap} from "../openstreetmap/openstreetmapAPI";
 import {forEach} from "ol/geom/flat/segments";
 import {Fill, Stroke, Style} from "ol/style";
 import CircleStyle from "ol/style/Circle";
 import { Vector } from 'ol/source';
 import VectorSource from "ol/source/Vector";
 import Text from 'ol/style/Text';
+import * as math from "ol/math";
+
+async function getBuurtenData() {
+    const apiUrl = "http://localhost:8080/gemeente/nieuwegein/buurt";
+    try {
+        const response = await fetch(apiUrl);
+        if (response.ok) {
+            const data = await response.json();
+            return data;
+        } else {
+            console.error("Fout bij ophalen data:", response.status);
+        }
+    } catch (error) {
+        console.error("Fout bij ophalen data:", error);
+    }
+}
 
 export async function bolletjesLayer() {
-    //TODO hier een statement schrijven die alle data van eva ophaalt en die gebruiken voor het maken van de buurten nu nog hardcoded
-    var buurten = [{buurtnaam: "Binnenweides", score: 10}
-        , {buurtnaam: "Blokhoeve", score: 5}
-        , {buurtnaam: "Buitengebied Laagraven", score: 15}
-        , {buurtnaam: "Burgen", score: 11}
-        , {buurtnaam: "De Wiers", score: 9}
-        , {buurtnaam: "Hagen", score: 7}
-        , {buurtnaam: "Jutphaas", score: 25}
-        , {buurtnaam: "Merwestein", score: 23}
-        , {buurtnaam: "Zuilenstein", score: 18}];
+
+    var buurten = await getBuurtenData();
+    console.log(buurten);
     var points = [];
 
     for (const buurt of buurten) {
-        var coordinates = await getCoordinatenVanOpenStreetMap(buurt.buurtnaam);
-        let coordinatesCijferObject = {
-            coord: coordinates,
-            cijfer: buurt.score
+        if (buurt.laagGeletterdheid && buurt.laagGeletterdheid.percentageTaalgroei !== null) {
+            console.log(buurt.laagGeletterdheid.percentageTaalgroei);
+            var coordinates = await getCoordinatenVanGoogleMaps(buurt.naam + " Nieuwegein");
+            let coordinatesCijferObject = {
+                coord: coordinates,
+                cijfer: buurt.laagGeletterdheid.percentageTaalgroei,
+                totaleHuishoudens: buurt.aantalHuishoudens
+            }
+            points.push(coordinatesCijferObject)
+            //dit pushed iets in de trant van [{coord: [1, 1.00012], cijfer: 5}]
         }
-        points.push(coordinatesCijferObject)
-        //dit pushed iets in de trant van [{coord: [1, 1.00012], cijfer: 5}]
     }
+
+    console.log(points);
 
     console.log(points);
 
@@ -78,35 +93,41 @@ export async function bolletjesLayer() {
 
 
     for(const point of points) {
+        var totaal = point.totaleHuishoudens * point.cijfer;
+        var afgerond = Math.round(totaal);
+        console.log(totaal);
         if (point.coord === undefined) {
             continue;
         }
         let size = 0;
-        if (point.cijfer <= 5) {
+        if(afgerond <= 0) {
+            size += 5;
+        }
+        else if (afgerond <= 20) {
+            size += 7;
+        }
+        else if (afgerond <= 40) {
+            size += 9;
+        }
+        else if (afgerond <= 60) {
+            size += 12;
+        }
+        else if (afgerond <= 80) {
             size += 15;
         }
-        else if (point.cijfer <= 10) {
+        else if (afgerond <= 100) {
+            size += 18;
+        }
+        else if (afgerond <= 120) {
             size += 20;
-        }
-        else if (point.cijfer <= 12) {
-            size += 25;
-        }
-        else if (point.cijfer <= 15) {
-            size += 30;
-        }
-        else if (point.cijfer <= 17) {
-            size += 35;
-        }
-        else if (point.cijfer <= 20) {
-            size += 40;
         } else {
-            size += 45;
+            size += 22;
         }
 
         var feature = new Feature({
             geometry: new Point(point.coord),
             fixedPixelSize: size,
-            label: point.cijfer.toString()
+            label: afgerond.toString()
         });
 
         vectorSource.addFeature(feature);
