@@ -124,7 +124,7 @@ public class ObjectToFileConverter {
                                         }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
 
-                                Optional.ofNullable(buurt.getAlcoholGebruik())
+                                Optional.ofNullable(buurt.getLocatieInfo().getAlcoholGebruik())
                                         .map(alcoholGebruik -> switch (cellIndex) {
                                             case 8 -> alcoholGebruik.percentageVoldoetAanAlcoholRichtlijn();
                                             case 9 -> alcoholGebruik.percentageDrinker();
@@ -133,26 +133,26 @@ public class ObjectToFileConverter {
                                             default -> null;
                                         }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
-                                Optional.ofNullable(buurt.getBewegen())
+                                Optional.ofNullable(buurt.getLocatieInfo().getBewegen())
                                         .map(bewegen -> switch (cellIndex) {
                                             case 12 -> bewegen.percentageVoldoetAanBeweegRichtlijn();
                                             case 13 -> bewegen.percentageWekelijkseSporter();
                                             default -> null;
                                         }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
-                                Optional.ofNullable(buurt.getFinancieel())
+                                Optional.ofNullable(buurt.getLocatieInfo().getFinancieel())
                                         .map(financieel -> switch (cellIndex) {
                                             case 14 -> financieel.percentageMoeiteMetRondkomen();
                                             default -> null;
                                         }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
-                                Optional.ofNullable(buurt.getGeluidshinder())
+                                Optional.ofNullable(buurt.getLocatieInfo().getGeluidshinder())
                                         .map(financieel -> switch (cellIndex) {
                                             case 15 -> financieel.percentageErnstigeGeluidhinderDoorBuren();
                                             default -> null;
                                         }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
-                                Optional.ofNullable(buurt.getGewicht())
+                                Optional.ofNullable(buurt.getLocatieInfo().getGewicht())
                                         .map(gewicht -> switch (cellIndex) {
                                             case 16 -> gewicht.percentageOndergewicht();
                                             case 17 -> gewicht.percentageNormaalGewicht();
@@ -160,13 +160,13 @@ public class ObjectToFileConverter {
                                             case 19 -> gewicht.percentageErnstigOvergewicht();
                                             default -> null;
                                         }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
-                                Optional.ofNullable(buurt.getGezondheid())
+                                Optional.ofNullable(buurt.getLocatieInfo().getGezondheid())
                                         .map(gezondheid -> switch (cellIndex) {
                                             case 20 -> gezondheid.percentageGoedOfZeerErvarenGezondheid();
                                             default -> null;
                                         }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
-                                Optional.ofNullable(buurt.getLichamelijkeBeperkingOfAandoening())
+                                Optional.ofNullable(buurt.getLocatieInfo().getLichamelijkeBeperkingOfAandoening())
                                         .map(aandoening -> switch (cellIndex) {
                                             case 21 -> aandoening.percentageEenOfMeerLangdurigeAandoeningen();
                                             case 22 -> aandoening.percentageBeperktVanwegeGezondheid();
@@ -179,7 +179,7 @@ public class ObjectToFileConverter {
                                             default -> null;
                                         }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
-                                Optional.ofNullable(buurt.getMentaleProblemen())
+                                Optional.ofNullable(buurt.getLocatieInfo().getMentaleProblemen())
                                         .map(problemen -> switch (cellIndex) {
                                             case 29 -> problemen.percentageMatigOfHoogRisicoOpAngstOfDepressie();
                                             case 30 -> problemen.percentageHoogRisicoOpAngstOfDepressie();
@@ -191,20 +191,20 @@ public class ObjectToFileConverter {
                                             default -> null;
                                         }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
-                                Optional.ofNullable(buurt.getOndersteuning())
+                                Optional.ofNullable(buurt.getLocatieInfo().getOndersteuning())
                                         .map(ondersteuning -> switch (cellIndex) {
                                             case 36 -> ondersteuning.percentageVrijwilligersWerk();
                                             case 37 -> ondersteuning.percentageMantelZorger();
                                             default -> null;
                                         }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
-                                Optional.ofNullable(buurt.getRegieOverEigenLeven())
+                                Optional.ofNullable(buurt.getLocatieInfo().getRegieOverEigenLeven())
                                         .map(regie -> switch (cellIndex) {
                                             case 38 -> regie.percentageMatigOfVeelRegieOverEigenLeven();
                                             default -> null;
                                         }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
-                                Optional.ofNullable(buurt.getRoken())
+                                Optional.ofNullable(buurt.getLocatieInfo().getRoken())
                                         .map(roken -> switch (cellIndex) {
                                             case 39 -> roken.percentageRokers();
                                             default -> null;

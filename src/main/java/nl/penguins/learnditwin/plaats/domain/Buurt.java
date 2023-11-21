@@ -20,13 +20,13 @@ public class Buurt extends Locatie {
         this.postcode6 = new ArrayList<>();
     }
 
-    public void addStraat(String postcode6) {
+    public void toevoegenPostcode6(String postcode6) {
         this.postcode6.add(postcode6);
     }
 
     @Override
     public LaagGeletterdheid getLaagGeletterdheid() {
-        return super.laagGeletterdheid;
+        return super.getLocatieInfo().getLaagGeletterdheid();
     }
 
     public void setAantalHuishoudens(int aantalHuishoudens) {

@@ -52,7 +52,7 @@ public class GWBPostcode6Converter implements DataConverter {
                     Buurt opgeslagenBuurt = buurten.parallelStream().filter(buurt -> buurt.getRegioCode_id().equals(buurtCode)).findFirst().orElse(new Buurt(buurtCode, buurtNaam));
                     Gemeente opgeslagenGemeente = gemeentes.parallelStream().filter(gemeente -> gemeente.getRegioCode_id().equals(gemeenteCode)).findFirst().orElse(new Gemeente(gemeenteCode, gemeenteNaam));
 
-                    opgeslagenBuurt.addStraat(postCode6);
+                    opgeslagenBuurt.toevoegenPostcode6(postCode6);
                     opgeslagenWijk.addBuurt(opgeslagenBuurt);
                     opgeslagenGemeente.voegWijkToe(opgeslagenWijk);
 

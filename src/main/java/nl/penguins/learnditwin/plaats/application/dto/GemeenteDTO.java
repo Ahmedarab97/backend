@@ -1,15 +1,17 @@
 package nl.penguins.learnditwin.plaats.application.dto;
 
+import lombok.Getter;
 import nl.penguins.learnditwin.plaats.domain.Gemeente;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Getter
 public class GemeenteDTO {
-    private String gemeenteCode;
-    private String naam;
+    private final String gemeenteCode;
+    private final String naam;
 
-    private Set<WijkDTO> wijken;
+    private final Set<WijkDTO> wijken;
 
     public GemeenteDTO(Gemeente gemeente) {
         this.gemeenteCode = gemeente.getRegioCode_id();
@@ -17,17 +19,5 @@ public class GemeenteDTO {
         this.wijken = gemeente.getWijken().stream()
                 .map(WijkDTO::new)
                 .collect(Collectors.toSet());
-    }
-
-    public String getGemeenteCode() {
-        return gemeenteCode;
-    }
-
-    public String getNaam() {
-        return naam;
-    }
-
-    public Set<WijkDTO> getWijken() {
-        return wijken;
     }
 }

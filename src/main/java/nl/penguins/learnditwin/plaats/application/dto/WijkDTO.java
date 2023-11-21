@@ -1,7 +1,9 @@
 package nl.penguins.learnditwin.plaats.application.dto;
 
+import lombok.Getter;
 import nl.penguins.learnditwin.plaats.domain.Wijk;
 
+@Getter
 public class WijkDTO {
     private final String wijkCode;
     private final String naam;
@@ -11,17 +13,5 @@ public class WijkDTO {
         this.wijkCode = wijk.getRegioCode_id();
         this.naam = wijk.getNaam();
         this.wijkInfo = new BuurtInfoDTO(wijk);
-    }
-
-    public String getWijkCode() {
-        return wijkCode;
-    }
-
-    public String getNaam() {
-        return naam;
-    }
-
-    public BuurtInfoDTO getWijkInfo() {
-        return wijkInfo;
     }
 }
