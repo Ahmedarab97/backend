@@ -60,13 +60,13 @@ export async function bolletjesLayer() {
     var vectorSource = new VectorSource();
 
     var styleFunction = function (feature) {
-        var size = feature.get('fixedPixelSize');
+        var size = feature.get('pixel');
 
         return new Style({
             image: new CircleStyle({
                 radius: size,
                 fill: new Fill({
-                    color: 'gray'
+                    color: feature.get('color')
                 }),
                 stroke: new Stroke({
                     color: 'black',
@@ -92,10 +92,10 @@ export async function bolletjesLayer() {
         style: styleFunction
     });
 
-
     for(const point of points) {
         var totaal = point.totaleHuishoudens * point.cijfer;
         var afgerond = Math.round(totaal);
+        var color= "";
         console.log(totaal);
         if (point.coord === undefined) {
             continue;
@@ -103,32 +103,44 @@ export async function bolletjesLayer() {
         let size = 0;
         if(afgerond <= 0) {
             size += 5;
+            color = "#008000";
         }
         else if (afgerond <= 20) {
             size += 7;
+            color = "#90EE90";
         }
         else if (afgerond <= 40) {
             size += 9;
+            color = "#FFFF00";
         }
         else if (afgerond <= 60) {
             size += 12;
+            color = "#FFD700";
         }
         else if (afgerond <= 80) {
             size += 15;
+            color = "#FFA500";
         }
         else if (afgerond <= 100) {
             size += 18;
+            color = "#FF6347";
         }
         else if (afgerond <= 120) {
             size += 20;
+            color = "#FF0000";
         } else {
             size += 22;
+            color = "#8B0000";
         }
+
+        console.log(color);
+
 
         var feature = new Feature({
             geometry: new Point(point.coord),
-            fixedPixelSize: size,
-            label: afgerond.toString()
+            pixel: size,
+            label: afgerond.toString(),
+            color: color
         });
 
         vectorSource.addFeature(feature);
