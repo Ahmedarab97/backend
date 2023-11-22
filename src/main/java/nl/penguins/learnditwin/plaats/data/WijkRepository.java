@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;
 
-public interface PlaatsRepository extends MongoRepository<Wijk, String> {
+public interface WijkRepository extends MongoRepository<Wijk, String> {
     default Optional<Buurt> findBuurtByWijkAndBuurtNaam(String wijkNaam, String buurtNaam) {
         Optional<Wijk> wijkOptional = findByNaam(wijkNaam);
         return wijkOptional.flatMap(wijk -> wijk.getBuurten().stream()

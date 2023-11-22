@@ -13,16 +13,15 @@ public class ZipUitpakker {
         try {
             File file = resource.getFile();
 
-            if (file.getName().endsWith(".zip")){
+            if (file.getName().endsWith(".zip")) {
                 ZipFile zipFile = new ZipFile(file);
 
                 ZipEntry zipEntry = zipFile.entries().nextElement();
                 return zipFile.getInputStream(zipEntry);
             } else return null;
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
+            return null;
         }
-
-        return null;
     }
 }

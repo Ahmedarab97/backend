@@ -1,44 +1,55 @@
 package nl.penguins.learnditwin.plaats.domain;
 
-import org.springframework.data.mongodb.core.index.Indexed;
+import nl.penguins.learnditwin.plaats.domain.buurtinfo.LaagGeletterdheid;
 import org.springframework.data.mongodb.core.mapping.*;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.HashSet;
-import java.util.Objects;
+import java.util.Locale;
 import java.util.Set;
 
-public class Wijk {
-    @MongoId(FieldType.STRING)
-    @Field("wijkCode_id")
-    @Indexed(unique = true)
-    private String wijkCode_id;
-    private String naam;
-    private String postcode4;
+@Document("wijk")
+public class Wijk extends Locatie{
+    private final String postcode4;
     @DBRef
-    private Set<Buurt> buurten = new HashSet<>();
+    private Set<Buurt> buurten;
 
-    protected Wijk(){}
-    public Wijk(String naam, String postcode4, Set<Buurt> buurten) {
-        this.naam = naam;
+    public Wijk(String regioCode_id, String naam, String postcode4) {
+        super(regioCode_id, naam);
         this.postcode4 = postcode4;
-        this.buurten = buurten;
+        this.buurten = new HashSet<>();
     }
 
-    public Wijk(String wijkCode, String naam, String postcode4) {
-        this.wijkCode_id = wijkCode;
-        this.naam = naam;
-        this.postcode4 = postcode4;
+    @Override
+    public int getAantalInwoners() {
+        return buurten.stream()
+                .mapToInt(Buurt::getAantalInwoners)
+                .sum();
     }
 
-    public static Wijk generateWijk(String naam, String postcode4, Set<Buurt> buurten) {
-        return new Wijk(naam, postcode4, buurten);
+    @Override
+    public LaagGeletterdheid getLaagGeletterdheid() {
+        int totaalInwoners = 0;
+        int totaalAantalLaagGeletterde = 0;
+
+        for (Buurt buurt : buurten){
+            if (buurt.getLaagGeletterdheid() != null){
+                int aantalInwoners = buurt.getAantalInwoners();
+                double laagGeletterdheidPercentage = buurt.getLaagGeletterdheid().percentageTaalgroei();
+
+                totaalInwoners += aantalInwoners;
+                totaalAantalLaagGeletterde += (int) (aantalInwoners * laagGeletterdheidPercentage);
+            }
+        }
+
+        double percentageTaalgroei = (double) totaalAantalLaagGeletterde / totaalInwoners;
+        DecimalFormat df = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US));
+        percentageTaalgroei = Double.parseDouble(df.format(percentageTaalgroei));
+        return new LaagGeletterdheid(percentageTaalgroei);
     }
     public void addBuurt(Buurt buurt) {
         this.buurten.add(buurt);
-    }
-
-    public String getNaam() {
-        return naam;
     }
 
     public String getPostcode4() {
@@ -47,22 +58,5 @@ public class Wijk {
 
     public Set<Buurt> getBuurten() {
         return buurten;
-    }
-
-    public String getWijkCode_id() {
-        return wijkCode_id;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Wijk wijk = (Wijk) o;
-        return Objects.equals(wijkCode_id, wijk.wijkCode_id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(wijkCode_id);
     }
 }

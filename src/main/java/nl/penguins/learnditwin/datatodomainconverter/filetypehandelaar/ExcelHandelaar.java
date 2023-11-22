@@ -11,22 +11,21 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Component
-public class ExcelHandelaar extends FileHandelaar{
+public class ExcelHandelaar extends FileHandelaar {
     @Override
     public List<String[]> readData(String path, int optioneelSheetNummer) {
         try {
             ClassPathResource resource = new ClassPathResource(path);
             InputStream optioneelInputStream = super.zipUitpakker.getInputStreamVanZipMogelijkeZip(resource);
 
-            if (optioneelInputStream == null){
+            if (optioneelInputStream == null) {
                 optioneelInputStream = resource.getInputStream();
             }
             Workbook workbook = WorkbookFactory.create(optioneelInputStream);
 
             Sheet sheet = workbook.getSheetAt(optioneelSheetNummer);
 
-            return StreamSupport.stream(sheet.spliterator(), false)
-                    .skip(1)
+            List<String[]> ongefilterdeRijen = StreamSupport.stream(sheet.spliterator(), false)
                     .map(row -> StreamSupport.stream(row.spliterator(), false)
                             .map(cell -> {
                                 if (cell.getCellType() == CellType.NUMERIC) {
@@ -34,14 +33,29 @@ public class ExcelHandelaar extends FileHandelaar{
                                 } else if (cell.getCellType() == CellType.STRING) {
                                     return cell.getStringCellValue();
                                 } else {
-                                    return ""; // Voeg hier logica toe voor andere celtypen indien nodig
+                                    return "";
                                 }
                             })
-                            .toArray(String[]::new))
-                    .collect(Collectors.toList());
-            } catch (IOException e){
-                return null;
+                            .toArray(String[]::new)).toList();
+            return ongefilterdeRijen;
+            // TODO sublist()
+        } catch (IOException e) {
+            return null;
         }
+    }
+
+    @Override
+    public List<String[]> readData(String path, int van, int tot, int optioneelSheetNummer) {
+        List<String[]> ongefilterdeData = readData(path, optioneelSheetNummer);
+
+        return ongefilterdeData.subList(van, tot);
+    }
+
+    @Override
+    public List<String[]> readData(String path, int vanaf, int optioneelSheetNummer) {
+        List<String[]> ongefilterdeData = readData(path, optioneelSheetNummer);
+
+        return ongefilterdeData.subList(vanaf, ongefilterdeData.size());
     }
 }
 
