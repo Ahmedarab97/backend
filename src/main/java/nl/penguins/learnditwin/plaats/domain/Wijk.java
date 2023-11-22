@@ -1,5 +1,6 @@
 package nl.penguins.learnditwin.plaats.domain;
 
+import lombok.Getter;
 import nl.penguins.learnditwin.plaats.domain.buurtinfo.LaagGeletterdheid;
 import org.springframework.data.mongodb.core.mapping.*;
 
@@ -9,8 +10,9 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
+@Getter
 @Document("wijk")
-public class Wijk extends Locatie{
+public class Wijk extends Locatie {
     private final String postcode4;
     @DBRef
     private Set<Buurt> buurten;
@@ -26,8 +28,8 @@ public class Wijk extends Locatie{
         int totaalInwoners = 0;
         int totaalAantalLaagGeletterde = 0;
 
-        for (Buurt buurt : buurten){
-            if (buurt.getLaagGeletterdheid() != null){
+        for (Buurt buurt : buurten) {
+            if (buurt.getLaagGeletterdheid() != null) {
                 int aantalInwoners = buurt.getAantalInwoners();
                 double laagGeletterdheidPercentage = buurt.getLaagGeletterdheid().percentageTaalgroei();
 
@@ -41,15 +43,8 @@ public class Wijk extends Locatie{
         percentageTaalgroei = Double.parseDouble(df.format(percentageTaalgroei));
         return new LaagGeletterdheid(percentageTaalgroei);
     }
+
     public void addBuurt(Buurt buurt) {
         this.buurten.add(buurt);
-    }
-
-    public String getPostcode4() {
-        return postcode4;
-    }
-
-    public Set<Buurt> getBuurten() {
-        return buurten;
     }
 }

@@ -1,5 +1,6 @@
 package nl.penguins.learnditwin.plaats.domain;
 
+import lombok.Getter;
 import nl.penguins.learnditwin.plaats.domain.buurtinfo.*;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -9,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.Objects;
 
+@Getter
 @Document("locatie")
 public abstract class Locatie {
     @MongoId(FieldType.STRING)
@@ -26,22 +28,6 @@ public abstract class Locatie {
     }
 
     protected Locatie() {
-    }
-
-    public String getNaam() {
-        return naam;
-    }
-
-    public String getRegioCode_id() {
-        return regioCode_id;
-    }
-
-    public LocatieInfo getLocatieInfo() {
-        return locatieInfo;
-    }
-
-    public int getAantalInwoners() {
-        return aantalInwoners;
     }
 
     public void setAantalHuishoudens(int aantalInwoners) {

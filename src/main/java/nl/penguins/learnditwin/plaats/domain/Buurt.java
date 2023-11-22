@@ -1,11 +1,13 @@
 package nl.penguins.learnditwin.plaats.domain;
 
+import lombok.Getter;
 import nl.penguins.learnditwin.plaats.domain.buurtinfo.LaagGeletterdheid;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Document("buurt")
 public class Buurt extends Locatie {
     private List<String> postcode6;
@@ -26,9 +28,5 @@ public class Buurt extends Locatie {
     @Override
     public LaagGeletterdheid getLaagGeletterdheid() {
         return super.getLocatieInfo().getLaagGeletterdheid();
-    }
-
-    public List<String> getPostcode6() {
-        return postcode6;
     }
 }
