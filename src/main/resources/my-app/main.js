@@ -8,32 +8,75 @@ import {Point} from "ol/geom";
 import Feature from "ol/Feature";
 import {Heatmap} from "ol/layer";
 import {bolletjesLayer} from "./javascript/layers/bolletjes";
+import {getCoordinatenVanGoogleMaps} from "./javascript/openstreetmap/openstreetmapAPI";
 
-var coordinates = [
-  [5.0908, 52.0305],
-  [5.1000, 52.0320]
+mapboxgl.accessToken = 'pk.eyJ1IjoibmllbHMtc3R1ZGVudCIsImEiOiJjbHA5cmJ1NTIwMDYxMmlybGFrZWRjbDZ6In0.8VO7uezdXrrfBqeZpyYXDA';
 
-];
-
-
-let map = new Map({
-  target: 'map',
-  layers: [
-    new TileLayer({
-      source: new OSM()
-    }),
-  ],
-  view: new View({
-    center: ol.proj.fromLonLat([5.0908, 52.0305]),
-    zoom: 12
-  })
+var map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/streets-v11',
+  center: await getCoordinatenVanGoogleMaps("nieuwegein"),
+  zoom: 12,
 });
 
+map.on('load', () => {
+  // Add the 3D building layer
+  map.addLayer({
+    id: '3d-buildings',
+    source: 'composite',
+    'source-layer': 'building',
+    filter: ['==', 'extrude', 'true'],
+    type: 'fill-extrusion',
+    minzoom: 15,
+    paint: {
+      'fill-extrusion-color': '#aaa',
+      'fill-extrusion-height': ['get', 'height'],
+      'fill-extrusion-base': ['get', 'min_height'],
+      'fill-extrusion-opacity': 0.6
+    }
+  });
+});
 
+map.addControl(new mapboxgl.NavigationControl());
+
+// var coordinates = [
+//   [5.0908, 52.0305],
+//   [5.1000, 52.0320]
+//
+// ];
+//
+//
+// let map = new Map({
+//   target: 'map',
+//   layers: [
+//     new TileLayer({
+//       source: new OSM()
+//     }),
+//   ],
+//   view: new View({
+//     center: ol.proj.fromLonLat([5.0908, 52.0305]),
+//     zoom: 12
+//   })
+// });
+//
+//
 window.addMarker = async function() {
-  let layer2 = await bolletjesLayer();
-  map.addLayer(layer2);
-  console.log(map.getAllLayers());
+  const geojson = await bolletjesLayer();
+  map.addSource('bolletjes-source', {
+    type: 'geojson',
+    data: geojson
+  });
+  map.addLayer({
+    id: 'bolletjes-layer',
+    type: 'circle',
+    source: 'bolletjes-source',
+    paint: {
+      'circle-radius': ['get', 'size'],
+      'circle-color': ['get', 'color'],
+      'circle-stroke-color': 'black',
+      'circle-stroke-width': 2
+    }
+  });
 }
 // pakCoordinaten();
 //, "3431BB", "3431BC", "3431BD", "3431BE", "3431BM", "3431CA", "3431CB", "3431CC"

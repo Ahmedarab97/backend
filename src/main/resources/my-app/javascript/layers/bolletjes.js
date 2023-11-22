@@ -33,7 +33,6 @@ async function getBuurtenData() {
 }
 
 export async function bolletjesLayer() {
-
     var buurten = await getBuurtenData();
     console.log(buurten);
     var points = [];
@@ -46,86 +45,47 @@ export async function bolletjesLayer() {
                 coord: coordinates,
                 cijfer: buurt.wijkInfo.laagGeletterdheid.percentageTaalgroei,
                 totaleHuishoudens: buurt.aantalInwoners
-            }
-            points.push(coordinatesCijferObject)
-            //dit pushed iets in de trant van [{coord: [1, 1.00012], cijfer: 5}]
+            };
+            points.push(coordinatesCijferObject);
+            // This pushes something like [{coord: [1, 1.00012], cijfer: 5}]
         }
     }
 
     console.log(points);
 
-    console.log(points);
-
-
-    var vectorSource = new VectorSource();
-
-    var styleFunction = function (feature) {
-        var size = feature.get('pixel');
-
-        return new Style({
-            image: new CircleStyle({
-                radius: size,
-                fill: new Fill({
-                    color: feature.get('color')
-                }),
-                stroke: new Stroke({
-                    color: 'black',
-                    width: 2
-                })
-            }),
-            text: new Text({
-                text: feature.get('label'),
-                font: '12px Calibri,sans-serif',
-                fill: new Fill({
-                    color: '#000'
-                }),
-                stroke: new Stroke({
-                    color: '#fff',
-                    width: 2
-                })
-            })
-        });
+    var geojson = {
+        type: 'FeatureCollection',
+        features: []
     };
 
-    var vectorLayer = new VectorLayer({
-        source: vectorSource,
-        style: styleFunction
-    });
-
-    for(const point of points) {
+    for (const point of points) {
         var totaal = point.totaleHuishoudens * point.cijfer;
         var afgerond = Math.round(totaal);
-        var color= "";
+        var color = "";
         console.log(totaal);
         if (point.coord === undefined) {
             continue;
         }
         let size = 0;
-        if(afgerond <= 0) {
+        if (afgerond <= 0) {
             size += 5;
             color = "#008000";
-        }
-        else if (afgerond <= 20) {
+        } else if (afgerond <= 20) {
             size += 7;
             color = "#90EE90";
-        }
-        else if (afgerond <= 40) {
+        } else if (afgerond <= 40) {
             size += 9;
             color = "#FFFF00";
-        }
-        else if (afgerond <= 60) {
+        } else if (afgerond <= 60) {
             size += 12;
             color = "#FFD700";
-        }
-        else if (afgerond <= 80) {
+        } else if (afgerond <= 80) {
             size += 15;
             color = "#FFA500";
-        }
-        else if (afgerond <= 100) {
+        } else if (afgerond <= 100) {
             size += 18;
             color = "#FF6347";
-        }
-        else if (afgerond <= 120) {
+        } else if (afgerond <= 120) {
             size += 20;
             color = "#FF0000";
         } else {
@@ -135,17 +95,155 @@ export async function bolletjesLayer() {
 
         console.log(color);
 
-
-        var feature = new Feature({
-            geometry: new Point(point.coord),
-            pixel: size,
-            label: afgerond.toString(),
-            color: color
+        geojson.features.push({
+            type: 'Feature',
+            geometry: {
+                type: 'Point',
+                coordinates: point.coord
+            },
+            properties: {
+                label: afgerond.toString(),
+                size: size,
+                color: color
+            }
         });
-
-        vectorSource.addFeature(feature);
     }
-    return vectorLayer;
+    return geojson;
+
+
+    // let layer = {
+    //     id: 'bolletjes-layer',
+    //     type: 'circle',
+    //     source: 'bolletjes-source',
+    //     paint: {
+    //         'circle-radius': ['get', 'size'],
+    //         'circle-color': ['get', 'color'],
+    //         'circle-stroke-color': 'black',
+    //         'circle-stroke-width': 2
+    //     }
+    // }
+
+    // map.on('load', function () {
+    //     map.addSource(layer.id, {
+    //         type: 'geojson',
+    //         data: geojson
+    //     });
+    // });
+
+    return layer;
+    //
+    // var buurten = await getBuurtenData();
+    // console.log(buurten);
+    // var points = [];
+    //
+    // for (const buurt of buurten.wijken) {
+    //     if (buurt.wijkInfo !== null && buurt.wijkInfo.laagGeletterdheid.percentageTaalgroei !== null) {
+    //         console.log(buurt.wijkInfo.laagGeletterdheid.percentageTaalgroei);
+    //         var coordinates = await getCoordinatenVanGoogleMaps(buurt.naam + " Nieuwegein");
+    //         let coordinatesCijferObject = {
+    //             coord: coordinates,
+    //             cijfer: buurt.wijkInfo.laagGeletterdheid.percentageTaalgroei,
+    //             totaleHuishoudens: buurt.aantalInwoners
+    //         }
+    //         points.push(coordinatesCijferObject)
+    //         //dit pushed iets in de trant van [{coord: [1, 1.00012], cijfer: 5}]
+    //     }
+    // }
+    //
+    // console.log(points);
+    //
+    // console.log(points);
+    //
+    //
+    // var vectorSource = new VectorSource();
+    //
+    // var styleFunction = function (feature) {
+    //     var size = feature.get('pixel');
+    //
+    //     return new Style({
+    //         image: new CircleStyle({
+    //             radius: size,
+    //             fill: new Fill({
+    //                 color: feature.get('color')
+    //             }),
+    //             stroke: new Stroke({
+    //                 color: 'black',
+    //                 width: 2
+    //             })
+    //         }),
+    //         text: new Text({
+    //             text: feature.get('label'),
+    //             font: '12px Calibri,sans-serif',
+    //             fill: new Fill({
+    //                 color: '#000'
+    //             }),
+    //             stroke: new Stroke({
+    //                 color: '#fff',
+    //                 width: 2
+    //             })
+    //         })
+    //     });
+    // };
+    //
+    // var vectorLayer = new VectorLayer({
+    //     source: vectorSource,
+    //     style: styleFunction
+    // });
+    //
+    // for(const point of points) {
+    //     var totaal = point.totaleHuishoudens * point.cijfer;
+    //     var afgerond = Math.round(totaal);
+    //     var color= "";
+    //     console.log(totaal);
+    //     if (point.coord === undefined) {
+    //         continue;
+    //     }
+    //     let size = 0;
+    //     if(afgerond <= 0) {
+    //         size += 5;
+    //         color = "#008000";
+    //     }
+    //     else if (afgerond <= 20) {
+    //         size += 7;
+    //         color = "#90EE90";
+    //     }
+    //     else if (afgerond <= 40) {
+    //         size += 9;
+    //         color = "#FFFF00";
+    //     }
+    //     else if (afgerond <= 60) {
+    //         size += 12;
+    //         color = "#FFD700";
+    //     }
+    //     else if (afgerond <= 80) {
+    //         size += 15;
+    //         color = "#FFA500";
+    //     }
+    //     else if (afgerond <= 100) {
+    //         size += 18;
+    //         color = "#FF6347";
+    //     }
+    //     else if (afgerond <= 120) {
+    //         size += 20;
+    //         color = "#FF0000";
+    //     } else {
+    //         size += 22;
+    //         color = "#8B0000";
+    //     }
+    //
+    //     console.log(color);
+    //
+    //
+    //     var feature = new Feature({
+    //         geometry: new Point(point.coord),
+    //         pixel: size,
+    //         label: afgerond.toString(),
+    //         color: color
+    //     });
+    //
+    //     vectorSource.addFeature(feature);
+    // }
+    // return vectorLayer;
 }
 
 

@@ -25,7 +25,7 @@ export async function getCoordinatenVanGoogleMaps(buurtnaam) {
                 var latitude = location.lat();
                 var longitude = location.lng();
                 var coord = [longitude, latitude];
-                var transformedCoord = fromLonLat(coord);
+                var transformedCoord = coord;
                 console.log('Transformed Coordinates:', transformedCoord);
                 resolve(transformedCoord);
             } else {
