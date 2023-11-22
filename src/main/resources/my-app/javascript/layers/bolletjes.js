@@ -17,11 +17,12 @@ import Text from 'ol/style/Text';
 import * as math from "ol/math";
 
 async function getBuurtenData() {
-    const apiUrl = "http://localhost:8080/gemeente/nieuwegein/buurt";
+    const apiUrl = "http://localhost:8080/gemeente/Nieuwegein";
     try {
         const response = await fetch(apiUrl);
         if (response.ok) {
             const data = await response.json();
+            console.log(data);
             return data;
         } else {
             console.error("Fout bij ophalen data:", response.status);
@@ -37,14 +38,14 @@ export async function bolletjesLayer() {
     console.log(buurten);
     var points = [];
 
-    for (const buurt of buurten) {
-        if (buurt.laagGeletterdheid && buurt.laagGeletterdheid.percentageTaalgroei !== null) {
-            console.log(buurt.laagGeletterdheid.percentageTaalgroei);
+    for (const buurt of buurten.wijken) {
+        if (buurt.wijkInfo !== null && buurt.wijkInfo.laagGeletterdheid.percentageTaalgroei !== null) {
+            console.log(buurt.wijkInfo.laagGeletterdheid.percentageTaalgroei);
             var coordinates = await getCoordinatenVanGoogleMaps(buurt.naam + " Nieuwegein");
             let coordinatesCijferObject = {
                 coord: coordinates,
-                cijfer: buurt.laagGeletterdheid.percentageTaalgroei,
-                totaleHuishoudens: buurt.aantalHuishoudens
+                cijfer: buurt.wijkInfo.laagGeletterdheid.percentageTaalgroei,
+                totaleHuishoudens: buurt.aantalInwoners
             }
             points.push(coordinatesCijferObject)
             //dit pushed iets in de trant van [{coord: [1, 1.00012], cijfer: 5}]
