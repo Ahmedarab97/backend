@@ -16,8 +16,11 @@ public class LocatieInfo {
     private Roken roken;
     private Gezondheid gezondheid;
     private LaagGeletterdheid laagGeletterdheid;
+    private Leeftijd leeftijd;
+    private Huishouden huishouden;
 
     public LocatieInfo() {
+        this.leeftijd = new Leeftijd();
     }
 
     public void setAlcoholGebruik(double percentageVoldoetAanAlcoholRichtlijn,
@@ -87,5 +90,9 @@ public class LocatieInfo {
 
     public void setLaagGeletterdheid(double laagGeletterdheid){
         this.laagGeletterdheid = new LaagGeletterdheid(laagGeletterdheid);
+    }
+
+    public void setHuishouden(double percentage1PersoonsHuishoudens){
+        this.huishouden = new Huishouden(percentage1PersoonsHuishoudens);
     }
 }

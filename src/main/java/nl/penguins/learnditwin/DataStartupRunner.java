@@ -1,6 +1,7 @@
 package nl.penguins.learnditwin;
 
 import nl.penguins.learnditwin.datatodomainconverter.AlleCijfersGezondheidMonitorConverter;
+import nl.penguins.learnditwin.datatodomainconverter.AlleCijfersOverzichtGemeenteConverter;
 import nl.penguins.learnditwin.datatodomainconverter.GWBLaaggeletterdheidConverter;
 import nl.penguins.learnditwin.datatodomainconverter.GWBPostcode6Converter;
 import nl.penguins.learnditwin.datatofileconverter.ObjectToFileConverter;
@@ -19,13 +20,15 @@ public class DataStartupRunner implements CommandLineRunner {
     nl.penguins.learnditwin.datatodomainconverter.GWBPostcode6Converter GWBPostcode6Converter;
     GWBLaaggeletterdheidConverter laaggeletterdheidConverter;
     AlleCijfersGezondheidMonitorConverter alleCijfersGezondheidMonitorConverter;
+    AlleCijfersOverzichtGemeenteConverter alleCijfersOverzichtGemeenteConverter;
     ObjectToFileConverter objectToFileConverter;
 
-    public DataStartupRunner(GWBPostcode6Converter GWBPostcode6Converter, GWBLaaggeletterdheidConverter laaggeletterdheidConverter, AlleCijfersGezondheidMonitorConverter alleCijfersGezondheidMonitorConverter, ObjectToFileConverter objectToFileConverter) {
+    public DataStartupRunner(GWBPostcode6Converter GWBPostcode6Converter, GWBLaaggeletterdheidConverter laaggeletterdheidConverter, AlleCijfersGezondheidMonitorConverter alleCijfersGezondheidMonitorConverter, ObjectToFileConverter objectToFileConverter, AlleCijfersOverzichtGemeenteConverter alleCijfersOverzichtGemeenteConverter) {
         this.GWBPostcode6Converter = GWBPostcode6Converter;
         this.laaggeletterdheidConverter = laaggeletterdheidConverter;
         this.alleCijfersGezondheidMonitorConverter = alleCijfersGezondheidMonitorConverter;
         this.objectToFileConverter = objectToFileConverter;
+        this.alleCijfersOverzichtGemeenteConverter = alleCijfersOverzichtGemeenteConverter;
     }
 
     @Override
@@ -38,6 +41,7 @@ public class DataStartupRunner implements CommandLineRunner {
         System.out.println("Laaggeletterdheid data binnen");
 
         alleCijfersGezondheidMonitorConverter.convertData("data/allecijfers/gezondheidsmonitor-gemeente-nieuwegein.xlsx");
+        alleCijfersOverzichtGemeenteConverter.convertData("data/allecijfers/overzicht-nieuwegein.xlsx");
 //        objectToFileConverter.convertObjectenNaarExcel("Nieuwegein", "data");
     }
 

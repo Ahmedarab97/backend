@@ -64,7 +64,6 @@ public class GWBLaaggeletterdheidConverter implements DataConverter {
         percentageTaalgroeiAfgerond = Double.parseDouble(df.format(percentageTaalgroeiAfgerond));
 
         buurt.getLocatieInfo().setLaagGeletterdheid(percentageTaalgroeiAfgerond);
-        buurt.setAantalHuishoudens(totaalAantalHuishoudens);
         buurtRepository.save(buurt);
     }
 }

@@ -86,33 +86,33 @@ public class AlleCijfersGezondheidMonitorConverter implements DataConverter {
         double wekelijkseSporter = Double.parseDouble(regel[13]);
 
         // HIER EINDIGT SPORT DATA:D
-        double goedErvarenGezondheid = Double.parseDouble(regel[14]);
+        double goedErvarenGezondheid = Double.parseDouble(regel[17]);
 
-        double langdurigeAandoeningen = Double.parseDouble(regel[15]);
-        double beperktVanwegeGezondheid = Double.parseDouble(regel[16]);
-        double ernstigBeperktVanwegeGezondheid = Double.parseDouble(regel[17]);
-        double langdurigeZiekteEnBeperkt = Double.parseDouble(regel[18]);
-        double gehoorBeperking = Double.parseDouble(regel[19]);
-        double gezichtBeperking = Double.parseDouble(regel[20]);
-        double mobiliteitBeperking = Double.parseDouble(regel[21]);
-        double eenOfMeerLichamelijkeBeperking = Double.parseDouble(regel[22]);
+        double langdurigeAandoeningen = Double.parseDouble(regel[18]);
+        double beperktVanwegeGezondheid = Double.parseDouble(regel[19]);
+        double ernstigBeperktVanwegeGezondheid = Double.parseDouble(regel[20]);
+        double langdurigeZiekteEnBeperkt = Double.parseDouble(regel[21]);
+        double gehoorBeperking = Double.parseDouble(regel[22]);
+        double gezichtBeperking = Double.parseDouble(regel[23]);
+        double mobiliteitBeperking = Double.parseDouble(regel[24]);
+        double eenOfMeerLichamelijkeBeperking = Double.parseDouble(regel[25]);
 
-        double matigOfHoogRisicoOpAngstOfDepressie = Double.parseDouble(regel[23]);
-        double hoogRisicoOpAngstOfDepressie = Double.parseDouble(regel[24]);
-        double veelStressInAfgelopen4Weken = Double.parseDouble(regel[25]);
-        double eenzaam = Double.parseDouble(regel[26]);
-        double ernstigOfZeerEenzaam = Double.parseDouble(regel[27]);
-        double emotioneelEenzaam = Double.parseDouble(regel[28]);
-        double sociaalEenzaam = Double.parseDouble(regel[29]);
+        double matigOfHoogRisicoOpAngstOfDepressie = Double.parseDouble(regel[26]);
+        double hoogRisicoOpAngstOfDepressie = Double.parseDouble(regel[27]);
+        double veelStressInAfgelopen4Weken = Double.parseDouble(regel[28]);
+        double eenzaam = Double.parseDouble(regel[29]);
+        double ernstigOfZeerEenzaam = Double.parseDouble(regel[30]);
+        double emotioneelEenzaam = Double.parseDouble(regel[31]);
+        double sociaalEenzaam = Double.parseDouble(regel[32]);
 
-        double matigOfVeelRegieOverEigenLeven = Double.parseDouble(regel[30]);
+        double matigOfVeelRegieOverEigenLeven = Double.parseDouble(regel[33]);
 
-        double moeiteMetRondkomen = Double.parseDouble(regel[31]);
+        double moeiteMetRondkomen = Double.parseDouble(regel[34]);
 
-        double ernstigGeluidhinderDoorBuren = Double.parseDouble(regel[32]);
+        double ernstigGeluidhinderDoorBuren = Double.parseDouble(regel[35]);
 
-        double vrijwilligersWerk = Double.parseDouble(regel[33]);
-        double mantelZorger = Double.parseDouble(regel[34]);
+        double vrijwilligersWerk = Double.parseDouble(regel[36]);
+        double mantelZorger = Double.parseDouble(regel[37]);
 
         locatie.getLocatieInfo().setAlcoholGebruik(voldoetAanAlcoholRichtlijn, drinker, zwareDrinker, overMatigeDrinker);
         locatie.getLocatieInfo().setGewicht(onderGewicht, normaalGewicht, overgewicht, ernstigOvergewicht);

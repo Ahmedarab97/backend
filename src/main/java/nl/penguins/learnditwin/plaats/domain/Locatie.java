@@ -16,6 +16,7 @@ public abstract class Locatie {
     @Indexed(unique = true)
     protected String regioCode_id;
     protected String naam;
+    protected int aantalInwoners;
     protected LocatieInfo locatieInfo;
 
     public Locatie(String regioCode, String naam) {
@@ -27,8 +28,6 @@ public abstract class Locatie {
     protected Locatie() {
     }
 
-    public abstract int getAantalInwoners();
-
     public String getNaam() {
         return naam;
     }
@@ -39,6 +38,14 @@ public abstract class Locatie {
 
     public LocatieInfo getLocatieInfo() {
         return locatieInfo;
+    }
+
+    public int getAantalInwoners() {
+        return aantalInwoners;
+    }
+
+    public void setAantalHuishoudens(int aantalInwoners) {
+        this.aantalInwoners = aantalInwoners;
     }
 
     public abstract LaagGeletterdheid getLaagGeletterdheid();

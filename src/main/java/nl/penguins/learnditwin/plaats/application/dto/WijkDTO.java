@@ -8,12 +8,12 @@ public class WijkDTO {
     private final String wijkCode;
     private final String naam;
     private final int aantalInwoners;
-    private final BuurtInfoDTO wijkInfo;
+    private final LocatieInfoDTO wijkInfo;
 
     public WijkDTO(Wijk wijk) {
         this.wijkCode = wijk.getRegioCode_id();
         this.naam = wijk.getNaam();
         this.aantalInwoners = wijk.getAantalInwoners();
-        this.wijkInfo = new BuurtInfoDTO(wijk);
+        this.wijkInfo = new LocatieInfoDTO(wijk);
     }
 }

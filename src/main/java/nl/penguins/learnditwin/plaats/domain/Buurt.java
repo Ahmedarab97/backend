@@ -8,7 +8,6 @@ import java.util.List;
 
 @Document("buurt")
 public class Buurt extends Locatie {
-    private int aantalHuishoudens;
     private List<String> postcode6;
 
     protected Buurt() {
@@ -29,16 +28,7 @@ public class Buurt extends Locatie {
         return super.getLocatieInfo().getLaagGeletterdheid();
     }
 
-    public void setAantalHuishoudens(int aantalHuishoudens) {
-        this.aantalHuishoudens = aantalHuishoudens;
-    }
-
     public List<String> getPostcode6() {
         return postcode6;
-    }
-
-    @Override
-    public int getAantalInwoners() {
-        return this.aantalHuishoudens;
     }
 }

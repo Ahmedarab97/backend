@@ -22,13 +22,6 @@ public class Wijk extends Locatie{
     }
 
     @Override
-    public int getAantalInwoners() {
-        return buurten.stream()
-                .mapToInt(Buurt::getAantalInwoners)
-                .sum();
-    }
-
-    @Override
     public LaagGeletterdheid getLaagGeletterdheid() {
         int totaalInwoners = 0;
         int totaalAantalLaagGeletterde = 0;

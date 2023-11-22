@@ -5,7 +5,7 @@ import nl.penguins.learnditwin.plaats.domain.Locatie;
 import nl.penguins.learnditwin.plaats.domain.buurtinfo.*;
 
 @Getter
-public class BuurtInfoDTO {
+public class LocatieInfoDTO {
     private final AlcoholGebruik alcoholGebruik;
     private final Bewegen bewegen;
     private final Financieel financieel;
@@ -18,8 +18,10 @@ public class BuurtInfoDTO {
     private final Roken roken;
     private final Gezondheid gezondheid;
     private final LaagGeletterdheid laagGeletterdheid;
+    private final Huishouden huishouden;
+    private final Leeftijd leeftijd;
 
-    public BuurtInfoDTO(Locatie locatie) {
+    public LocatieInfoDTO(Locatie locatie) {
         this.alcoholGebruik = locatie.getLocatieInfo().getAlcoholGebruik();
         this.bewegen = locatie.getLocatieInfo().getBewegen();
         this.financieel = locatie.getLocatieInfo().getFinancieel();
@@ -32,20 +34,7 @@ public class BuurtInfoDTO {
         this.roken = locatie.getLocatieInfo().getRoken();
         this.gezondheid = locatie.getLocatieInfo().getGezondheid();
         this.laagGeletterdheid = locatie.getLaagGeletterdheid();
-    }
-
-    public BuurtInfoDTO(AlcoholGebruik alcoholGebruik, Bewegen bewegen, Financieel financieel, Geluidshinder geluidshinder, Gewicht gewicht, LichamelijkeBeperkingOfAandoening lichamelijkeBeperkingOfAandoening, MentaleProblemen mentaleProblemen, Ondersteuning ondersteuning, RegieOverEigenLeven regieOverEigenLeven, Roken roken, Gezondheid gezondheid, LaagGeletterdheid laagGeletterdheid) {
-        this.alcoholGebruik = alcoholGebruik;
-        this.bewegen = bewegen;
-        this.financieel = financieel;
-        this.geluidshinder = geluidshinder;
-        this.gewicht = gewicht;
-        this.lichamelijkeBeperkingOfAandoening = lichamelijkeBeperkingOfAandoening;
-        this.mentaleProblemen = mentaleProblemen;
-        this.ondersteuning = ondersteuning;
-        this.regieOverEigenLeven = regieOverEigenLeven;
-        this.roken = roken;
-        this.gezondheid = gezondheid;
-        this.laagGeletterdheid = laagGeletterdheid;
+        this.huishouden = locatie.getLocatieInfo().getHuishouden();
+        this.leeftijd = locatie.getLocatieInfo().getLeeftijd();
     }
 }

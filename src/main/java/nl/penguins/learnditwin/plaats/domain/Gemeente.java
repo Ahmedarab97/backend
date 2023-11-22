@@ -1,5 +1,6 @@
 package nl.penguins.learnditwin.plaats.domain;
 
+import lombok.Getter;
 import nl.penguins.learnditwin.plaats.domain.buurtinfo.LaagGeletterdheid;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,6 +11,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
+@Getter
 @Document("gemeente")
 public class Gemeente extends Locatie {
     @DBRef
@@ -18,13 +20,6 @@ public class Gemeente extends Locatie {
     public Gemeente(String regioCode_id, String naam) {
         super(regioCode_id, naam);
         this.wijken = new HashSet<>();
-    }
-
-    @Override
-    public int getAantalInwoners() {
-        return wijken.stream()
-                .mapToInt(Wijk::getAantalInwoners)
-                .sum();
     }
 
     @Override
@@ -46,10 +41,6 @@ public class Gemeente extends Locatie {
         DecimalFormat df = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US));
         percentageTaalgroei = Double.parseDouble(df.format(percentageTaalgroei));
         return new LaagGeletterdheid(percentageTaalgroei);
-    }
-
-    public Set<Wijk> getWijken() {
-        return wijken;
     }
 
     public void voegWijkToe(Wijk wijk) {
