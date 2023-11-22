@@ -109,28 +109,6 @@ export async function bolletjesLayer() {
         });
     }
     return geojson;
-
-
-    // let layer = {
-    //     id: 'bolletjes-layer',
-    //     type: 'circle',
-    //     source: 'bolletjes-source',
-    //     paint: {
-    //         'circle-radius': ['get', 'size'],
-    //         'circle-color': ['get', 'color'],
-    //         'circle-stroke-color': 'black',
-    //         'circle-stroke-width': 2
-    //     }
-    // }
-
-    // map.on('load', function () {
-    //     map.addSource(layer.id, {
-    //         type: 'geojson',
-    //         data: geojson
-    //     });
-    // });
-
-    return layer;
     //
     // var buurten = await getBuurtenData();
     // console.log(buurten);
