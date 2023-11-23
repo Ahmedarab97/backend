@@ -2,13 +2,9 @@ package nl.penguins.learnditwin.datatodomainconverter;
 
 import nl.penguins.learnditwin.datatodomainconverter.filetypehandelaar.ExcelHandelaar;
 
-import nl.penguins.learnditwin.plaats.data.BuurtRepository;
 import nl.penguins.learnditwin.plaats.data.GemeenteRepository;
-import nl.penguins.learnditwin.plaats.data.WijkRepository;
-import nl.penguins.learnditwin.plaats.domain.Buurt;
 import nl.penguins.learnditwin.plaats.domain.Gemeente;
 import nl.penguins.learnditwin.plaats.domain.Locatie;
-import nl.penguins.learnditwin.plaats.domain.Wijk;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,15 +12,11 @@ import java.util.List;
 @Component
 public class AlleCijfersGezondheidMonitorConverter implements DataConverter {
     private final ExcelHandelaar excelHandelaar;
-    private final BuurtRepository buurtRepository;
     private final GemeenteRepository gemeenteRepository;
-    private final WijkRepository wijkRepository;
 
-    public AlleCijfersGezondheidMonitorConverter(ExcelHandelaar excelHandelaar, BuurtRepository buurtRepository, GemeenteRepository gemeenteRepository, WijkRepository wijkRepository) {
+    public AlleCijfersGezondheidMonitorConverter(ExcelHandelaar excelHandelaar, GemeenteRepository gemeenteRepository) {
         this.excelHandelaar = excelHandelaar;
-        this.buurtRepository = buurtRepository;
         this.gemeenteRepository = gemeenteRepository;
-        this.wijkRepository = wijkRepository;
     }
 
     @Override
@@ -36,31 +28,16 @@ public class AlleCijfersGezondheidMonitorConverter implements DataConverter {
             String regioNaam = regel[1];
             String soortRegio = regel[2];
 
-            switch (soortRegio) {
-                case "Gemeente" -> {
-                    Gemeente locatie = gemeenteRepository.findById(regioCode).orElseThrow(() -> new RuntimeException("GemeenteNotFound"));
+            try {
+                Gemeente gemeente = gemeenteRepository.findGemeenteByCode(regioCode);
+                Locatie locatie = gemeente.getLocatieByRegioCode(regioCode);
 
-                    leesEnSetLocatieInfo(regel, locatie);
+                leesEnSetLocatieInfo(regel, locatie);
 
-                    gemeenteRepository.save(locatie);
-                }
-                case "Wijk" -> {
-                    Wijk locatie = wijkRepository.findById(regioCode).orElseThrow(() -> new RuntimeException("GemeenteNotFound"));
-
-                    leesEnSetLocatieInfo(regel, locatie);
-
-                    wijkRepository.save(locatie);
-                }
-                case "Buurt" -> {
-                    Buurt locatie = buurtRepository.findById(regioCode).orElseThrow(() -> new RuntimeException("GemeenteNotFound"));
-
-                    leesEnSetLocatieInfo(regel, locatie);
-
-                    buurtRepository.save(locatie);
-                }
-                default -> {
-                    continue;
-                }
+                gemeenteRepository.save(gemeente);
+            } catch (Exception e){
+                // todo specifieke error voor findGemeenteByCode
+                continue;
             }
         }
     }

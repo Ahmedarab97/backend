@@ -33,15 +33,15 @@ public class DataStartupRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        GWBPostcode6Converter.convertData("data/Postcodes/GWB2022_pc6.zip");
-//
-//        System.out.println("Begin laaggeletterdheid data laden");
-//        getPathFromFilesInMap("data/Laaggeletterdheid")
-//                .forEach(path -> laaggeletterdheidConverter.convertData(path));
-//        System.out.println("Laaggeletterdheid data binnen");
-//
-//        alleCijfersGezondheidMonitorConverter.convertData("data/allecijfers/gezondheidsmonitor-gemeente-nieuwegein.xlsx");
-//        alleCijfersOverzichtGemeenteConverter.convertData("data/allecijfers/overzicht-nieuwegein.xlsx");
+        GWBPostcode6Converter.convertData("data/Postcodes/GWB2022_pc6.zip");
+
+        System.out.println("Begin laaggeletterdheid data laden");
+        getPathFromFilesInMap("data/Laaggeletterdheid")
+                .forEach(path -> laaggeletterdheidConverter.convertData(path));
+        System.out.println("Laaggeletterdheid data binnen");
+
+        alleCijfersGezondheidMonitorConverter.convertData("data/allecijfers/gezondheidsmonitor-gemeente-nieuwegein.xlsx");
+        alleCijfersOverzichtGemeenteConverter.convertData("data/allecijfers/overzicht-nieuwegein.xlsx");
 //        objectToFileConverter.convertObjectenNaarExcel("Nieuwegein", "data");
     }
 

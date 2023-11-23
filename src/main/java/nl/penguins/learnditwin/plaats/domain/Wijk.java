@@ -2,7 +2,6 @@ package nl.penguins.learnditwin.plaats.domain;
 
 import lombok.Getter;
 import nl.penguins.learnditwin.plaats.domain.buurtinfo.LaagGeletterdheid;
-import org.springframework.data.mongodb.core.mapping.*;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -11,16 +10,28 @@ import java.util.Locale;
 import java.util.Set;
 
 @Getter
-@Document("wijk")
 public class Wijk extends Locatie {
     private final String postcode4;
-    @DBRef
     private Set<Buurt> buurten;
 
     public Wijk(String regioCode_id, String naam, String postcode4) {
         super(regioCode_id, naam);
         this.postcode4 = postcode4;
         this.buurten = new HashSet<>();
+    }
+
+    public Buurt getBuurtByRegioCode(String buurtId){
+        return buurten.stream()
+                .filter(buurt -> buurt.getRegioCode_id().equals(buurtId))
+                .findFirst()
+                .orElseThrow();
+    }
+
+    public Buurt getBuurtByNaam(String buurtNaam){
+        return buurten.stream()
+                .filter(buurt -> buurt.getNaam().equals(buurtNaam))
+                .findFirst()
+                .orElseThrow();
     }
 
     @Override

@@ -1,9 +1,7 @@
 package nl.penguins.learnditwin.datatodomainconverter;
 
 import nl.penguins.learnditwin.datatodomainconverter.filetypehandelaar.ExcelHandelaar;
-import nl.penguins.learnditwin.plaats.data.BuurtRepository;
 import nl.penguins.learnditwin.plaats.data.GemeenteRepository;
-import nl.penguins.learnditwin.plaats.data.WijkRepository;
 import nl.penguins.learnditwin.plaats.domain.Buurt;
 import nl.penguins.learnditwin.plaats.domain.Gemeente;
 import nl.penguins.learnditwin.plaats.domain.Wijk;
@@ -14,14 +12,10 @@ import java.util.*;
 @Component
 public class GWBPostcode6Converter implements DataConverter {
     private final ExcelHandelaar fileHandler;
-    private final BuurtRepository buurtRepository;
-    private final WijkRepository wijkRepository;
     private final GemeenteRepository gemeenteRepository;
 
-    public GWBPostcode6Converter(ExcelHandelaar fileHandler, BuurtRepository buurtRepository, WijkRepository wijkRepository, GemeenteRepository gemeenteRepository) {
+    public GWBPostcode6Converter(ExcelHandelaar fileHandler, GemeenteRepository gemeenteRepository) {
         this.fileHandler = fileHandler;
-        this.buurtRepository = buurtRepository;
-        this.wijkRepository = wijkRepository;
         this.gemeenteRepository = gemeenteRepository;
     }
 
@@ -62,8 +56,6 @@ public class GWBPostcode6Converter implements DataConverter {
                 }
             });
 
-            wijkRepository.saveAll(wijken);
-            buurtRepository.saveAll(buurten);
             gemeenteRepository.saveAll(gemeentes);
         } catch (Exception e) {
             System.err.println(e.getMessage());

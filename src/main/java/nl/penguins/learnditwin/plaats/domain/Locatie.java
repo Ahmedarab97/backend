@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 import java.util.Objects;
 
 @Getter
-@Document("locatie")
 public abstract class Locatie {
     @MongoId(FieldType.STRING)
     @Field("regioCode_id")

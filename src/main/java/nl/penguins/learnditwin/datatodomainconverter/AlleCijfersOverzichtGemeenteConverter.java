@@ -1,12 +1,9 @@
 package nl.penguins.learnditwin.datatodomainconverter;
 
 import nl.penguins.learnditwin.datatodomainconverter.filetypehandelaar.ExcelHandelaar;
-import nl.penguins.learnditwin.plaats.data.BuurtRepository;
 import nl.penguins.learnditwin.plaats.data.GemeenteRepository;
-import nl.penguins.learnditwin.plaats.data.WijkRepository;
-import nl.penguins.learnditwin.plaats.domain.Buurt;
 import nl.penguins.learnditwin.plaats.domain.Gemeente;
-import nl.penguins.learnditwin.plaats.domain.Wijk;
+import nl.penguins.learnditwin.plaats.domain.Locatie;
 import org.springframework.stereotype.Component;
 
 import java.text.DecimalFormat;
@@ -18,14 +15,10 @@ import java.util.Locale;
 public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
     private final ExcelHandelaar excelHandelaar;
     private final GemeenteRepository gemeenteRepository;
-    private final WijkRepository wijkRepository;
-    private final BuurtRepository buurtRepository;
 
-    public AlleCijfersOverzichtGemeenteConverter(ExcelHandelaar excelHandelaar, GemeenteRepository gemeenteRepository, WijkRepository wijkRepository, BuurtRepository buurtRepository) {
+    public AlleCijfersOverzichtGemeenteConverter(ExcelHandelaar excelHandelaar, GemeenteRepository gemeenteRepository) {
         this.excelHandelaar = excelHandelaar;
         this.gemeenteRepository = gemeenteRepository;
-        this.wijkRepository = wijkRepository;
-        this.buurtRepository = buurtRepository;
     }
 
     @Override
@@ -40,31 +33,15 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
             String regioCode = inwonerRegel[2];
             int inwonerAantal = (int) Double.parseDouble(inwonerRegel[14]);
 
-            switch (soortRegio) {
-                case "Gemeente" -> {
-                    Gemeente locatie = gemeenteRepository.findById(regioCode).orElseThrow(() -> new RuntimeException("GemeenteNotFound"));
+            try {
+                Gemeente gemeente = gemeenteRepository.findGemeenteByCode(regioCode);
+                Locatie locatie = gemeente.getLocatieByRegioCode(regioCode);
 
-                    locatie.setAantalHuishoudens(inwonerAantal);
-
-                    gemeenteRepository.save(locatie);
-                }
-                case "Wijk" -> {
-                    Wijk locatie = wijkRepository.findById(regioCode).orElseThrow(() -> new RuntimeException("GemeenteNotFound"));
-
-                    locatie.setAantalHuishoudens(inwonerAantal);
-
-                    wijkRepository.save(locatie);
-                }
-                case "Buurt" -> {
-                    Buurt locatie = buurtRepository.findById(regioCode).orElseThrow(() -> new RuntimeException("GemeenteNotFound"));
-
-                    locatie.setAantalHuishoudens(inwonerAantal);
-
-                    buurtRepository.save(locatie);
-                }
-                default -> {
-                    continue;
-                }
+                locatie.setAantalHuishoudens(inwonerAantal);
+                gemeenteRepository.save(gemeente);
+            } catch (Exception e){
+                // todo specifieke error voor findGemeenteByCode
+                continue;
             }
         }
 
@@ -73,34 +50,16 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
             String regioCode = jongerDan15Regel[2];
             double percentageJongerDan15In2023 = Double.parseDouble(jongerDan15Regel[14]);
 
-            switch (soortRegio) {
-                case "Gemeente" -> {
-                    Gemeente locatie = gemeenteRepository.findById(regioCode).orElseThrow(() -> new RuntimeException("GemeenteNotFound"));
+            try {
+                Gemeente gemeente = gemeenteRepository.findGemeenteByCode(regioCode);
+                Locatie locatie = gemeente.getLocatieByRegioCode(regioCode);
 
-                    double afgerondPercentageJongerDan15 = afronden(percentageJongerDan15In2023);
-                    locatie.getLocatieInfo().getLeeftijd().setPercentageJongerDan15(afgerondPercentageJongerDan15);
-
-                    gemeenteRepository.save(locatie);
-                }
-                case "Wijk" -> {
-                    Wijk locatie = wijkRepository.findById(regioCode).orElseThrow(() -> new RuntimeException("GemeenteNotFound"));
-
-                    double afgerondPercentageJongerDan15 = afronden(percentageJongerDan15In2023);
-                    locatie.getLocatieInfo().getLeeftijd().setPercentageJongerDan15(afgerondPercentageJongerDan15);
-
-                    wijkRepository.save(locatie);
-                }
-                case "Buurt" -> {
-                    Buurt locatie = buurtRepository.findById(regioCode).orElseThrow(() -> new RuntimeException("GemeenteNotFound"));
-
-                    double afgerondPercentageJongerDan15 = afronden(percentageJongerDan15In2023);
-                    locatie.getLocatieInfo().getLeeftijd().setPercentageJongerDan15(afgerondPercentageJongerDan15);
-
-                    buurtRepository.save(locatie);
-                }
-                default -> {
-                    continue;
-                }
+                double afgerondPercentageJongerDan15 = afronden(percentageJongerDan15In2023);
+                locatie.getLocatieInfo().getLeeftijd().setPercentageJongerDan15(afgerondPercentageJongerDan15);
+                gemeenteRepository.save(gemeente);
+            } catch (Exception e){
+                // todo specifieke error voor findGemeenteByCode
+                continue;
             }
         }
 
@@ -108,34 +67,18 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
             String soortLocatie = ouderDan65Regel[1];
             String regioCode = ouderDan65Regel[2];
             double percentageOuderDan65In2023 = Double.parseDouble(ouderDan65Regel[14]);
-            switch (soortLocatie){
-                case "Gemeente" -> {
-                    Gemeente locatie = gemeenteRepository.findById(regioCode).orElseThrow(() -> new RuntimeException("GemeenteNotFound"));
 
-                    double afgerondPercentageOuderDan65 = afronden(percentageOuderDan65In2023);
-                    locatie.getLocatieInfo().getLeeftijd().setPercentageOuderDan65(afgerondPercentageOuderDan65);
+            try {
+                Gemeente gemeente = gemeenteRepository.findGemeenteByCode(regioCode);
+                Locatie locatie = gemeente.getLocatieByRegioCode(regioCode);
 
-                    gemeenteRepository.save(locatie);
-                }
-                case "Wijk" -> {
-                    Wijk locatie = wijkRepository.findById(regioCode).orElseThrow(() -> new RuntimeException("GemeenteNotFound"));
+                double afgerondPercentageOuderDan65 = afronden(percentageOuderDan65In2023);
+                locatie.getLocatieInfo().getLeeftijd().setPercentageOuderDan65(afgerondPercentageOuderDan65);
 
-                    double afgerondPercentageOuderDan65 = afronden(percentageOuderDan65In2023);
-                    locatie.getLocatieInfo().getLeeftijd().setPercentageOuderDan65(afgerondPercentageOuderDan65);
-
-                    wijkRepository.save(locatie);
-                }
-                case "Buurt" -> {
-                    Buurt locatie = buurtRepository.findById(regioCode).orElseThrow(() -> new RuntimeException("GemeenteNotFound"));
-
-                    double afgerondPercentageOuderDan65 = afronden(percentageOuderDan65In2023);
-                    locatie.getLocatieInfo().getLeeftijd().setPercentageOuderDan65(afgerondPercentageOuderDan65);
-
-                    buurtRepository.save(locatie);
-                }
-                default -> {
-                    continue;
-                }
+                gemeenteRepository.save(gemeente);
+            } catch (Exception e){
+                // todo specifieke error voor findGemeenteByCode
+                continue;
             }
         }
 
@@ -145,35 +88,17 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
 
             int aantalHuishoudens1Persoons = (int) Double.parseDouble(huisHouden[4]);
 
+            try {
+                Gemeente gemeente = gemeenteRepository.findGemeenteByCode(regioCode);
+                Locatie locatie = gemeente.getLocatieByRegioCode(regioCode);
 
-            switch (soortLocatie){
-                case "Gemeente" -> {
-                    Gemeente locatie = gemeenteRepository.findById(regioCode).orElseThrow(() -> new RuntimeException("GemeenteNotFound"));
+                double percentage = naarPercentage(locatie.getAantalInwoners(), aantalHuishoudens1Persoons);
+                locatie.getLocatieInfo().setHuishouden(percentage);
 
-                    double percentage = naarPercentage(locatie.getAantalInwoners(), aantalHuishoudens1Persoons);
-                    locatie.getLocatieInfo().setHuishouden(percentage);
-
-                    gemeenteRepository.save(locatie);
-                }
-                case "Wijk" -> {
-                    Wijk locatie = wijkRepository.findById(regioCode).orElseThrow(() -> new RuntimeException("GemeenteNotFound"));
-
-                    double percentage = naarPercentage(locatie.getAantalInwoners(), aantalHuishoudens1Persoons);
-                    locatie.getLocatieInfo().setHuishouden(percentage);
-
-                    wijkRepository.save(locatie);
-                }
-                case "Buurt" -> {
-                    Buurt locatie = buurtRepository.findById(regioCode).orElseThrow(() -> new RuntimeException("GemeenteNotFound"));
-
-                    double percentage = naarPercentage(locatie.getAantalInwoners(), aantalHuishoudens1Persoons);
-                    locatie.getLocatieInfo().setHuishouden(percentage);
-
-                    buurtRepository.save(locatie);
-                }
-                default -> {
-                    continue;
-                }
+                gemeenteRepository.save(gemeente);
+            } catch (Exception e){
+                // todo specifieke error voor findGemeenteByCode
+                continue;
             }
         }
     }
