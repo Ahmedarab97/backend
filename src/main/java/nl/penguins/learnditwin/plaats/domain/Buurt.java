@@ -2,6 +2,7 @@ package nl.penguins.learnditwin.plaats.domain;
 
 import lombok.Getter;
 import nl.penguins.learnditwin.plaats.domain.buurtinfo.LaagGeletterdheid;
+import nl.penguins.learnditwin.plaats.domain.ids.RegioCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,11 +11,7 @@ import java.util.List;
 public class Buurt extends Locatie {
     private List<String> postcode6;
 
-    protected Buurt() {
-        super();
-    }
-
-    public Buurt(String regioCode_id, String naam) {
+    public Buurt(RegioCode regioCode_id, String naam) {
         super(regioCode_id, naam);
         this.postcode6 = new ArrayList<>();
     }

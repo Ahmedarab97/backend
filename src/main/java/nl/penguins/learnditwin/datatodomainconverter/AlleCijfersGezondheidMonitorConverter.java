@@ -5,6 +5,9 @@ import nl.penguins.learnditwin.datatodomainconverter.filetypehandelaar.ExcelHand
 import nl.penguins.learnditwin.plaats.data.GemeenteRepository;
 import nl.penguins.learnditwin.plaats.domain.Gemeente;
 import nl.penguins.learnditwin.plaats.domain.Locatie;
+import nl.penguins.learnditwin.plaats.domain.ids.RegioCode;
+import nl.penguins.learnditwin.plaats.exception.GemeenteNotFoundException;
+import nl.penguins.learnditwin.plaats.exception.OngeldigeRegioCodeException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -24,20 +27,18 @@ public class AlleCijfersGezondheidMonitorConverter implements DataConverter {
         List<String[]> dataRegels = excelHandelaar.readData(path, 1,2);
 
         for (String[] regel : dataRegels) {
-            String regioCode = regel[0];
-            String regioNaam = regel[1];
-            String soortRegio = regel[2];
+            String stringRegioCode = regel[0];
 
             try {
+                RegioCode regioCode = new RegioCode(stringRegioCode);
+
                 Gemeente gemeente = gemeenteRepository.findGemeenteByCode(regioCode);
                 Locatie locatie = gemeente.getLocatieByRegioCode(regioCode);
 
                 leesEnSetLocatieInfo(regel, locatie);
 
                 gemeenteRepository.save(gemeente);
-            } catch (Exception e){
-                // todo specifieke error voor findGemeenteByCode
-                continue;
+            } catch (GemeenteNotFoundException | OngeldigeRegioCodeException ignored){
             }
         }
     }

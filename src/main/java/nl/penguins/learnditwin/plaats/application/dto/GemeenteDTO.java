@@ -15,7 +15,7 @@ public class GemeenteDTO {
     private final Set<WijkDTO> wijken;
 
     public GemeenteDTO(Gemeente gemeente) {
-        this.gemeenteCode = gemeente.getRegioCode_id();
+        this.gemeenteCode = gemeente.getRegioCode_id().getRegioCode();
         this.naam = gemeente.getNaam();
         this.aantalInwoners = gemeente.getAantalInwoners();
         this.wijken = gemeente.getWijken().stream()

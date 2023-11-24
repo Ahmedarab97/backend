@@ -4,6 +4,7 @@ import nl.penguins.learnditwin.datatodomainconverter.filetypehandelaar.ExcelHand
 import nl.penguins.learnditwin.plaats.data.GemeenteRepository;
 import nl.penguins.learnditwin.plaats.domain.Gemeente;
 import nl.penguins.learnditwin.plaats.domain.Locatie;
+import nl.penguins.learnditwin.plaats.domain.ids.RegioCode;
 import org.springframework.stereotype.Component;
 
 import java.text.DecimalFormat;
@@ -30,8 +31,9 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
 
         for (String[] inwonerRegel : inwonersAantallen) {
             String soortRegio = inwonerRegel[1];
-            String regioCode = inwonerRegel[2];
+            String stringRegioCode = inwonerRegel[2];
             int inwonerAantal = (int) Double.parseDouble(inwonerRegel[14]);
+            RegioCode regioCode = new RegioCode(stringRegioCode);
 
             try {
                 Gemeente gemeente = gemeenteRepository.findGemeenteByCode(regioCode);
@@ -47,8 +49,9 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
 
         for (String[] jongerDan15Regel : jongerDan15){
             String soortRegio = jongerDan15Regel[1];
-            String regioCode = jongerDan15Regel[2];
+            String stringRegioCode = jongerDan15Regel[2];
             double percentageJongerDan15In2023 = Double.parseDouble(jongerDan15Regel[14]);
+            RegioCode regioCode = new RegioCode(stringRegioCode);
 
             try {
                 Gemeente gemeente = gemeenteRepository.findGemeenteByCode(regioCode);
@@ -65,8 +68,9 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
 
         for (String[] ouderDan65Regel : ouderDan65){
             String soortLocatie = ouderDan65Regel[1];
-            String regioCode = ouderDan65Regel[2];
+            String stringRegioCode = ouderDan65Regel[2];
             double percentageOuderDan65In2023 = Double.parseDouble(ouderDan65Regel[14]);
+            RegioCode regioCode = new RegioCode(stringRegioCode);
 
             try {
                 Gemeente gemeente = gemeenteRepository.findGemeenteByCode(regioCode);
@@ -84,9 +88,10 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
 
         for (String[] huisHouden : huisHoudenData){
             String soortLocatie = huisHouden[1];
-            String regioCode = huisHouden[2];
+            String stringRegioCode = huisHouden[2];
 
             int aantalHuishoudens1Persoons = (int) Double.parseDouble(huisHouden[4]);
+            RegioCode regioCode = new RegioCode(stringRegioCode);
 
             try {
                 Gemeente gemeente = gemeenteRepository.findGemeenteByCode(regioCode);

@@ -11,18 +11,19 @@ import java.util.List;
 
 @Component
 public class ExcelHandelaar extends FileHandelaar {
+    private int sheetNummer = 0;
     @Override
-    public List<String[]> readData(String path, int optioneelSheetNummer) {
+    public List<String[]> readData(String path) {
         try {
             ClassPathResource resource = new ClassPathResource(path);
-            InputStream optioneelInputStream = super.zipUitpakker.getInputStreamVanZipMogelijkeZip(resource);
+            InputStream inputStream = super.zipUitpakker.getInputStreamVanZipMogelijkeZip(resource);
 
-            if (optioneelInputStream == null) {
-                optioneelInputStream = resource.getInputStream();
+            if (inputStream == null) {
+                inputStream = resource.getInputStream();
             }
-            Workbook workbook = WorkbookFactory.create(optioneelInputStream);
+            Workbook workbook = WorkbookFactory.create(inputStream);
 
-            Sheet sheet = workbook.getSheetAt(optioneelSheetNummer);
+            Sheet sheet = workbook.getSheetAt(sheetNummer);
 
             List<String[]> ongefilterdeRijen = new ArrayList<>();
 
@@ -50,14 +51,18 @@ public class ExcelHandelaar extends FileHandelaar {
         }
     }
 
-    @Override
+    public List<String[]> readData(String path, int optioneelSheetNummer) {
+        this.sheetNummer = optioneelSheetNummer;
+
+        return readData(path);
+    }
+
     public List<String[]> readData(String path, int van, int tot, int optioneelSheetNummer) {
         List<String[]> ongefilterdeData = readData(path, optioneelSheetNummer);
 
         return ongefilterdeData.subList(van, tot);
     }
 
-    @Override
     public List<String[]> readData(String path, int vanaf, int optioneelSheetNummer) {
         List<String[]> ongefilterdeData = readData(path, optioneelSheetNummer);
 

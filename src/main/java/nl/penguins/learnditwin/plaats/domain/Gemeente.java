@@ -2,6 +2,7 @@ package nl.penguins.learnditwin.plaats.domain;
 
 import lombok.Getter;
 import nl.penguins.learnditwin.plaats.domain.buurtinfo.LaagGeletterdheid;
+import nl.penguins.learnditwin.plaats.domain.ids.RegioCode;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.text.DecimalFormat;
@@ -20,7 +21,7 @@ public class Gemeente extends Locatie {
      * @param regioCode_id :
      * @param naam
      */
-    public Gemeente(String regioCode_id, String naam) {
+    public Gemeente(RegioCode regioCode_id, String naam) {
         super(regioCode_id, naam);
         this.wijken = new HashSet<>();
     }
@@ -32,26 +33,20 @@ public class Gemeente extends Locatie {
                 .orElseThrow();
     }
 
-    public Locatie getLocatieByRegioCode(String regioCode){
-        String soortLocatie = regioCode.substring(0, 2);
-
-        if (soortLocatie.equals("GM")){
+    public Locatie getLocatieByRegioCode(RegioCode regioCode){
+        if (regioCode.isGemeente()){
             return this;
         }
 
-        String wijkCode = "WK" + regioCode.substring(2, 8);
-
-        if (soortLocatie.equals("WK")){
-            return getWijkByWijkId(wijkCode);
-        } else if (soortLocatie.equals("BU")){
-            String buurtCode = "BU" + regioCode.substring(2, 10);
-            return getWijkByWijkId(wijkCode).getBuurtByRegioCode(buurtCode);
+        if (regioCode.isWijk()){
+            return getWijkByWijkId(regioCode);
+        } else {
+            return getWijkByWijkId(regioCode.getWijkCode())
+                    .getBuurtByRegioCode(regioCode);
         }
-
-        throw new RuntimeException("Locatie type niet herkend");
     }
 
-    private Wijk getWijkByWijkId(String wijkCode){
+    private Wijk getWijkByWijkId(RegioCode wijkCode){
         return wijken.stream()
                 .filter(w -> w.getRegioCode_id().equals(wijkCode))
                 .findFirst()

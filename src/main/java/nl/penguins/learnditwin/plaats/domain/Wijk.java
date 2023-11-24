@@ -2,6 +2,7 @@ package nl.penguins.learnditwin.plaats.domain;
 
 import lombok.Getter;
 import nl.penguins.learnditwin.plaats.domain.buurtinfo.LaagGeletterdheid;
+import nl.penguins.learnditwin.plaats.domain.ids.RegioCode;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -14,13 +15,13 @@ public class Wijk extends Locatie {
     private final String postcode4;
     private Set<Buurt> buurten;
 
-    public Wijk(String regioCode_id, String naam, String postcode4) {
+    public Wijk(RegioCode regioCode_id, String naam, String postcode4) {
         super(regioCode_id, naam);
         this.postcode4 = postcode4;
         this.buurten = new HashSet<>();
     }
 
-    public Buurt getBuurtByRegioCode(String buurtId){
+    public Buurt getBuurtByRegioCode(RegioCode buurtId){
         return buurten.stream()
                 .filter(buurt -> buurt.getRegioCode_id().equals(buurtId))
                 .findFirst()

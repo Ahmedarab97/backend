@@ -1,17 +1,33 @@
-package nl.penguins.learnditwin.plaats.domain;
+package nl.penguins.learnditwin.plaats.domain.ids;
+
+import lombok.Getter;
+import nl.penguins.learnditwin.plaats.exception.OngeldigeRegioCodeException;
 
 import java.util.Objects;
 
+@Getter
 public class RegioCode {
     private String regioCode;
 
     public RegioCode(String regioCode) {
         this.regioCode = regioCode;
 
-        if (!this.isValideRegioCode()) throw new RuntimeException("regio code is niet valide");
+        if (!this.isValideRegioCode()) {
+            throw new OngeldigeRegioCodeException("Ongeldige regiocode. Een regiocode moet beginnen met 'GM' voor een gemeente, 'WK' voor een wijk, of 'BU' voor een buurt.");
+        }
     }
 
     public RegioCode() {
+    }
+
+    // TODO : getGemeente variant, getWijk variant
+    // TODO : test
+    public RegioCode getGemeenteCode(){
+        return  new RegioCode("GM" + regioCode.substring(2, 6));
+    }
+
+    public RegioCode getWijkCode(){
+        return new RegioCode("WK" + regioCode.substring(2, 8));
     }
 
     public boolean isValideRegioCode() {
@@ -34,10 +50,6 @@ public class RegioCode {
         return this.regioCode.substring(0, 2);
     }
 
-    public String getRegioCode() {
-        return regioCode;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -51,12 +63,5 @@ public class RegioCode {
     @Override
     public int hashCode() {
         return regioCode != null ? regioCode.hashCode() : 0;
-    }
-
-    @Override
-    public String toString() {
-        return "RegioCode{" +
-                "regioCode='" + regioCode + '\'' +
-                '}';
     }
 }

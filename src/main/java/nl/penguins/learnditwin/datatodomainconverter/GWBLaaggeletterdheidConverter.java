@@ -51,11 +51,11 @@ public class GWBLaaggeletterdheidConverter implements DataConverter {
             totaalAantalHuishoudens += base;
 
             // Deze informatie is alleen nodig als we de whizeSegmant erin willen verwerken
-            String whizeSegmant = line[0];
-            double percentageNT1Taalgroeier = Double.parseDouble(line[2].replace(",", "."));
-            double basePercentage = Double.parseDouble(line[4].replace(",", "."));
-            double index = Double.parseDouble(line[5].replace(",", "."));
-            double percentagePenetratie = Double.parseDouble(line[6].replace(",", "."));
+//            String whizeSegmant = line[0];
+//            double percentageNT1Taalgroeier = Double.parseDouble(line[2].replace(",", "."));
+//            double basePercentage = Double.parseDouble(line[4].replace(",", "."));
+//            double index = Double.parseDouble(line[5].replace(",", "."));
+//            double percentagePenetratie = Double.parseDouble(line[6].replace(",", "."));
         }
 
         double percentageTaalgroeiAfgerond = (double) totaalAantalHuishoudensTaalgroei / totaalAantalHuishoudens;

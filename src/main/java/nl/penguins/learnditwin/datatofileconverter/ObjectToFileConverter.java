@@ -109,11 +109,11 @@ public class ObjectToFileConverter {
                         .forEach(buurt -> {
                             Row row = sheet.createRow(indexExcel.getAndIncrement());
 
-                            row.createCell(0).setCellValue(wijk.getRegioCode_id());
+                            row.createCell(0).setCellValue(wijk.getRegioCode_id().getRegioCode());
                             row.createCell(1).setCellValue(wijk.getPostcode4());
                             row.createCell(2).setCellValue(wijk.getNaam());
 
-                            row.createCell(3).setCellValue(buurt.getRegioCode_id());
+                            row.createCell(3).setCellValue(buurt.getRegioCode_id().getRegioCode());
                             row.createCell(4).setCellValue(buurt.getNaam());
                             row.createCell(5).setCellValue(buurt.getPostcode6().toString());
                             row.createCell(6).setCellValue(buurt.getAantalInwoners());
