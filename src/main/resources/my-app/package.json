@@ -10,6 +10,7 @@
     "vite": "^4.0.4"
   },
   "dependencies": {
+    "lit": "^3.0.2",
     "ol": "latest"
   }
 }

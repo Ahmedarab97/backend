@@ -12,19 +12,19 @@ import {forEach} from "ol/geom/flat/segments";
 import {Fill, Stroke, Style} from "ol/style";
 import CircleStyle from "ol/style/Circle";
 
-export async function laaggeletterdheidLayer(postcodes) {
-    try{
-        let coordinates =  await Promise.all(postcodes.map(postcode => getCoordinatenVanOpenStreetMap(postcode)));
+export async function laaggeletterdheidLayer(postcodes, thresholdVariable) {
+    try {
+        let coordinates = await Promise.all(postcodes.map(postcode => getCoordinatenVanOpenStreetMap(postcode)));
         console.log(coordinates);
-        // if(postcode in jutphaas){
-        //     switch(buurt) {
-        //         case buurt > 10:
-        //     }
-        // }
+
+        // Determine the gradient based on the thresholdVariable
+        let gradientColors = (thresholdVariable > 15) ?
+            ['rgba(255,0,0,0)', 'rgb(255,0,0)', 'rgb(255,100,100)', 'rgb(255,150,150)', 'rgb(255,200,200)', 'rgb(255,255,255)'] :
+            ['rgba(33,102,172,0)', 'rgb(70,178,24)', 'rgb(224,240,209)', 'rgb(219,253,199)', 'rgb(166,239,98)', 'rgb(86,178,24)', 'rgb(38,103,0)'];
 
         var heatmapLayer = new Heatmap({
             source: new Vector({
-                features: coordinates.map(function(coord) {
+                features: coordinates.map(function (coord) {
                     return new Feature({
                         geometry: new Point(coord)
                     });
@@ -33,23 +33,13 @@ export async function laaggeletterdheidLayer(postcodes) {
             blur: 15,
             radius: 10,
             fill: new Fill({
-               color: 'green'
+                color: 'green'
             }),
-            gradient: [
-                'rgba(33,102,172,0)',
-                'rgba(178,24,43,1)',
-                'rgba(209,229,240,1)',
-                'rgba(253,219,199,1)',
-                'rgba(239,138,98,1)',
-                'rgba(178,24,43,1)',
-                'rgba(103,0,31,1)',
-            ],
+            gradient: gradientColors,
         });
         return heatmapLayer;
-    }
-    catch {
+    } catch {
         console.error("er gaat wel iets fout in dit stukje code");
     }
 }
-
 

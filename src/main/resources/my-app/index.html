@@ -7,16 +7,34 @@
   <title>Using OpenLayers with Vite</title>
   <link rel="stylesheet" href="./style.css" />
   <link rel="stylesheet" href="./node_modules/ol/ol.css" />
+
 </head>
 <body>
 <div id="map">
 </div>
-<label for="postalCodeInput">Enter Postal Code:</label>
-<input type="text" id="postalCodeInput" />
-<button onclick="addMarker()">Add Marker</button>
-
+<!--<label for="postalCodeInput">Enter Postal Code:</label>-->
+<!--<input type="text" id="postalCodeInput" />-->
+<!--<button onclick="addMarker()">Add Marker</button>-->
+<input type="checkbox" id="toggleHeatmapCheckbox" />
+<label for="toggleHeatmapCheckbox">Taalgroeiers</label>
+<input type="checkbox" id="toggleRookmapCheckbox" />
+<label for="toggleRookmapCheckbox">Rokers</label>
+<!--  <input type="checkbox" id="addHeatmapCheckbox" onchange="addHeatmapLayer()"> Add Heatmap Layer-->
+<!--</label>-->
+<!--<label>-->
+<!--  <input type="checkbox" id="toggleHeatmapCheckbox" onchange="toggleHeatmapLayer()"> Toggle Heatmap Layer-->
+<!--</label>-->
+<!--<button id="toggleHeatmap">Toggle Heatmap</button>-->
+<!--<my-element></my-element>-->
 <p id="dataTekst"></p>
+<!--<heatmap-controller></heatmap-controller>-->
+<!--<heatmap-container></heatmap-container>-->
+<!--<heatmap-element id="heatmap1"></heatmap-element>-->
+
+<button id="addHeatmapButton">Add Heatmap</button>
 <script type="module" src="./main.js"></script>
+
 <script src="https://openlayers.org/en/v4.6.5/build/ol.js"></script>
+<script type="module" src="./javascript/Element/heatmap-controller.js"></script>
 </body>
 </html>
