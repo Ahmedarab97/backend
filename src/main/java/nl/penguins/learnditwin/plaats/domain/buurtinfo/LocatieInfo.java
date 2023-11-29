@@ -18,6 +18,7 @@ public class LocatieInfo {
     private LaagGeletterdheid laagGeletterdheid;
     private Leeftijd leeftijd;
     private Huishouden huishouden;
+    private BevolkingsDichtheid bevolkingsDichtheid;
 
     public LocatieInfo() {
         this.leeftijd = new Leeftijd();
@@ -94,5 +95,9 @@ public class LocatieInfo {
 
     public void setHuishouden(double percentage1PersoonsHuishoudens){
         this.huishouden = new Huishouden(percentage1PersoonsHuishoudens);
+    }
+
+    public void setBevolkingsDichtheid(int bevolkingsDichtheidPerKilometer2) {
+        this.bevolkingsDichtheid = new BevolkingsDichtheid(bevolkingsDichtheidPerKilometer2);
     }
 }

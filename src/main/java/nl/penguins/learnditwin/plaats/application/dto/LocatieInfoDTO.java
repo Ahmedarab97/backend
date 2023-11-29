@@ -20,6 +20,7 @@ public class LocatieInfoDTO {
     private final LaagGeletterdheid laagGeletterdheid;
     private final Huishouden huishouden;
     private final Leeftijd leeftijd;
+    private final BevolkingsDichtheid bevolkingsDichtheid;
 
     public LocatieInfoDTO(Locatie locatie) {
         this.alcoholGebruik = locatie.getLocatieInfo().getAlcoholGebruik();
@@ -36,5 +37,6 @@ public class LocatieInfoDTO {
         this.laagGeletterdheid = locatie.getLaagGeletterdheid();
         this.huishouden = locatie.getLocatieInfo().getHuishouden();
         this.leeftijd = locatie.getLocatieInfo().getLeeftijd();
+        this.bevolkingsDichtheid = locatie.getLocatieInfo().getBevolkingsDichtheid();
     }
 }

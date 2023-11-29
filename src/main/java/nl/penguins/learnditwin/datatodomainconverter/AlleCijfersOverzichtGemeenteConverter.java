@@ -28,6 +28,7 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
         List<String[]> jongerDan15 = excelHandelaar.readData(path, 1, 63, 1);
         List<String[]> ouderDan65 = excelHandelaar.readData(path, 1, 63, 2);
         List<String[]> huisHoudenData = excelHandelaar.readData(path, 1, 63, 3);
+        List<String[]> bevolkingsdichtheidData = excelHandelaar.readData(path, 1, 63, 4);
 
         for (String[] inwonerRegel : inwonersAantallen) {
             String soortRegio = inwonerRegel[1];
@@ -102,6 +103,27 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
 
                 gemeenteRepository.save(gemeente);
             } catch (Exception e){
+                // todo specifieke error voor findGemeenteByCode
+                continue;
+            }
+        }
+
+        for (String[] bevolkingsdichtheid : bevolkingsdichtheidData){
+            String soortLocatie = bevolkingsdichtheid[1];
+            String stringRegioCode = bevolkingsdichtheid[2];
+
+            RegioCode regioCode = new RegioCode(stringRegioCode);
+
+            try {
+                Gemeente gemeente = gemeenteRepository.findGemeenteByCode(regioCode);
+                Locatie locatie = gemeente.getLocatieByRegioCode(regioCode);
+
+                int bevolkingsdichtheidPerKilometer2 = Integer.parseInt(bevolkingsdichtheid[14].split("\\.")[0]);
+                locatie.getLocatieInfo().setBevolkingsDichtheid(bevolkingsdichtheidPerKilometer2);
+
+                gemeenteRepository.save(gemeente);
+            } catch (Exception e){
+                System.out.println(e.getMessage());
                 // todo specifieke error voor findGemeenteByCode
                 continue;
             }
