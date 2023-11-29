@@ -22,6 +22,7 @@ public class LocatieInfo {
 
     public LocatieInfo() {
         this.leeftijd = new Leeftijd();
+        this.financieel = new Financieel();
     }
 
     public void setAlcoholGebruik(double percentageVoldoetAanAlcoholRichtlijn,
@@ -37,7 +38,10 @@ public class LocatieInfo {
     }
 
     public void setFinancieel(double percentageMoeiteMetRondkomen){
-        this.financieel = new Financieel(percentageMoeiteMetRondkomen);
+        this.financieel.setPercentageMoeiteMetRondkomen(percentageMoeiteMetRondkomen);
+    }
+    public void setBijstand(double percentageBijstand){
+        this.financieel.setPercentageMoeiteMetRondkomen(percentageBijstand);
     }
 
     public void setGeluidshinder(double percentageErnstigeGeluidhinderDoorBuren){

@@ -146,7 +146,7 @@ public class ObjectToFileConverter {
 
                                 Optional.ofNullable(buurt.getLocatieInfo().getFinancieel())
                                         .map(financieel -> switch (cellIndex) {
-                                            case 14 -> financieel.percentageMoeiteMetRondkomen();
+                                            case 14 -> financieel.getPercentageMoeiteMetRondkomen();
                                             default -> null;
                                         }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 

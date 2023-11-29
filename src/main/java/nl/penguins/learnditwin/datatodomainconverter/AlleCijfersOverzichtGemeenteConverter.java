@@ -29,6 +29,7 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
         List<String[]> ouderDan65 = excelHandelaar.readData(path, 1, 63, 2);
         List<String[]> huisHoudenData = excelHandelaar.readData(path, 1, 63, 3);
         List<String[]> bevolkingsdichtheidData = excelHandelaar.readData(path, 1, 63, 4);
+        List<String[]> bijstandData = excelHandelaar.readData(path, 1, 63, 5);
 
         for (String[] inwonerRegel : inwonersAantallen) {
             String soortRegio = inwonerRegel[1];
@@ -42,9 +43,7 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
 
                 locatie.setAantalHuishoudens(inwonerAantal);
                 gemeenteRepository.save(gemeente);
-            } catch (Exception e){
-                // todo specifieke error voor findGemeenteByCode
-                continue;
+            } catch (Exception ignored){
             }
         }
 
@@ -126,6 +125,23 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
                 System.out.println(e.getMessage());
                 // todo specifieke error voor findGemeenteByCode
                 continue;
+            }
+        }
+
+        for (String[] bijstand : bijstandData){
+            String soortLocatie = bijstand[1];
+            String stringRegioCode = bijstand[2];
+            double percentageBijstand = afronden(Double.parseDouble(bijstand[bijstand.length - 1]));
+
+            RegioCode regioCode = new RegioCode(stringRegioCode);
+
+            try {
+                Gemeente gemeente = gemeenteRepository.findGemeenteByCode(regioCode);
+                Locatie locatie = gemeente.getLocatieByRegioCode(regioCode);
+
+                locatie.getLocatieInfo().getFinancieel().setPercentageBijstand(percentageBijstand);
+                gemeenteRepository.save(gemeente);
+            } catch (Exception ignored){
             }
         }
     }
