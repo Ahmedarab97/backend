@@ -1,14 +1,10 @@
 package nl.penguins.learnditwin.plaats.domain.ids;
 
-import lombok.Getter;
 import nl.penguins.learnditwin.plaats.exception.OngeldigeRegioCodeException;
 
 import java.util.Objects;
 
-@Getter
-public class RegioCode {
-    private String regioCode;
-
+public record RegioCode(String regioCode) {
     public RegioCode(String regioCode) {
         this.regioCode = regioCode;
 
@@ -17,16 +13,13 @@ public class RegioCode {
         }
     }
 
-    public RegioCode() {
+    public RegioCode getGemeenteCode() {
+        return new RegioCode("GM" + regioCode.substring(2, 6));
     }
 
-    // TODO : getGemeente variant, getWijk variant
-    // TODO : test
-    public RegioCode getGemeenteCode(){
-        return  new RegioCode("GM" + regioCode.substring(2, 6));
-    }
-
-    public RegioCode getWijkCode(){
+    public RegioCode getWijkCode() {
+        if(this.isGemeente()) throw new OngeldigeRegioCodeException
+                ("Van een gemeente is geen wijk niveau te vinden");
         return new RegioCode("WK" + regioCode.substring(2, 8));
     }
 
@@ -58,10 +51,5 @@ public class RegioCode {
         RegioCode regioCode1 = (RegioCode) o;
 
         return Objects.equals(regioCode, regioCode1.regioCode);
-    }
-
-    @Override
-    public int hashCode() {
-        return regioCode != null ? regioCode.hashCode() : 0;
     }
 }

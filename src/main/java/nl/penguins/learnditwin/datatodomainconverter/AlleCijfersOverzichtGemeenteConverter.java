@@ -5,12 +5,14 @@ import nl.penguins.learnditwin.plaats.data.GemeenteRepository;
 import nl.penguins.learnditwin.plaats.domain.Gemeente;
 import nl.penguins.learnditwin.plaats.domain.Locatie;
 import nl.penguins.learnditwin.plaats.domain.ids.RegioCode;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.stereotype.Component;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Callable;
 
 @Component
 public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
@@ -30,6 +32,7 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
         List<String[]> huisHoudenData = excelHandelaar.readData(path, 1, 63, 3);
         List<String[]> bevolkingsdichtheidData = excelHandelaar.readData(path, 1, 63, 4);
         List<String[]> bijstandData = excelHandelaar.readData(path, 1, 63, 5);
+        List<String[]> woningPrijsData = excelHandelaar.readData(path, 1, 63, 6);
 
         for (String[] inwonerRegel : inwonersAantallen) {
             String soortRegio = inwonerRegel[1];
@@ -107,17 +110,21 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
             }
         }
 
+
         for (String[] bevolkingsdichtheid : bevolkingsdichtheidData){
             String soortLocatie = bevolkingsdichtheid[1];
             String stringRegioCode = bevolkingsdichtheid[2];
 
             RegioCode regioCode = new RegioCode(stringRegioCode);
 
+            System.out.println(bevolkingsdichtheid[14]);
+            // krijgt duizendtallen met getal achter de komma binnen, dus split
+            int bevolkingsdichtheidPerKilometer2 = Integer.parseInt(bevolkingsdichtheid[14].split("\\.")[0]);
             try {
                 Gemeente gemeente = gemeenteRepository.findGemeenteByCode(regioCode);
                 Locatie locatie = gemeente.getLocatieByRegioCode(regioCode);
 
-                int bevolkingsdichtheidPerKilometer2 = Integer.parseInt(bevolkingsdichtheid[14].split("\\.")[0]);
+                System.out.println(locatie.getNaam()+ " "+ locatie.getLocatieInfo().getWoonOmstandigheden().getAantalInwonersPerKilometer2());
                 locatie.getLocatieInfo().setBevolkingsDichtheid(bevolkingsdichtheidPerKilometer2);
 
                 gemeenteRepository.save(gemeente);
@@ -140,8 +147,32 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
                 Locatie locatie = gemeente.getLocatieByRegioCode(regioCode);
 
                 locatie.getLocatieInfo().getFinancieel().setPercentageBijstand(percentageBijstand);
+
                 gemeenteRepository.save(gemeente);
             } catch (Exception ignored){
+            }
+        }
+
+        for(String[] woningprijs : woningPrijsData){
+            String soortLocatie = woningprijs[1];
+            String stringRegioCode = woningprijs[2];
+
+            RegioCode regioCode = new RegioCode(stringRegioCode);
+
+            String optionalWoningPrijs = woningprijs[woningprijs.length - 1];
+            if (optionalWoningPrijs == null) continue;
+            int gemiddeldeWoningPrijs = Integer.parseInt(woningprijs[woningprijs.length -1].split("\\.")[0]);
+            try {
+                Gemeente gemeente = gemeenteRepository.findGemeenteByCode(regioCode);
+                Locatie locatie = gemeente.getLocatieByRegioCode(regioCode);
+
+                locatie.getLocatieInfo().setGemiddeldeWoningPrijs(gemiddeldeWoningPrijs);
+
+                gemeenteRepository.save(gemeente);
+            } catch (Exception e){
+                System.out.println(e.getMessage());
+                // todo specifieke error voor findGemeenteByCode
+                continue;
             }
         }
     }
@@ -150,6 +181,17 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
         double percentageAfgerond = (double) deel / totaalInwoners;
         return afronden(percentageAfgerond);
     }
+
+    // todo als we dit willen doen, dan moet ik eerst de locatie ophalen. En daarna pas de gemeente.
+//    private void setDataEnSlaOp(String regioCode, Callable<T> setterFunctie){
+//        Gemeente gemeente = gemeenteRepository.findGemeenteByCode(regioCode);
+//        Locatie locatie = gemeente.getLocatieByRegioCode(regioCode);
+//
+//        // TODO: heb het gevoel dat er hier iets fout gaat? want de punt staat op duizendtal
+//        setterFunctie.call();
+//
+//        gemeenteRepository.save(gemeente);
+//    }
 
     private double afronden(double getal){
         DecimalFormat df = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US));

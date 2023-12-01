@@ -18,11 +18,12 @@ public class LocatieInfo {
     private LaagGeletterdheid laagGeletterdheid;
     private Leeftijd leeftijd;
     private Huishouden huishouden;
-    private BevolkingsDichtheid bevolkingsDichtheid;
+    private WoonOmstandigheden woonOmstandigheden;
 
     public LocatieInfo() {
         this.leeftijd = new Leeftijd();
         this.financieel = new Financieel();
+        this.woonOmstandigheden = new WoonOmstandigheden();
     }
 
     public void setAlcoholGebruik(double percentageVoldoetAanAlcoholRichtlijn,
@@ -102,6 +103,14 @@ public class LocatieInfo {
     }
 
     public void setBevolkingsDichtheid(int bevolkingsDichtheidPerKilometer2) {
-        this.bevolkingsDichtheid = new BevolkingsDichtheid(bevolkingsDichtheidPerKilometer2);
+        this.woonOmstandigheden.setAantalInwonersPerKilometer2(bevolkingsDichtheidPerKilometer2);
+    }
+
+    public void setGemiddeldeWoningPrijs(int gemiddeldeWoningPrijs) {
+        this.woonOmstandigheden.setWoningPrijs(gemiddeldeWoningPrijs);
+    }
+
+    public void setPercentageFlatbewoners(double percentageFlatbewoners) {
+        this.woonOmstandigheden.setPercentageFlatBewoners(percentageFlatbewoners);
     }
 }

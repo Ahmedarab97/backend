@@ -11,7 +11,7 @@ public class WijkDTO {
     private final LocatieInfoDTO wijkInfo;
 
     public WijkDTO(Wijk wijk) {
-        this.wijkCode = wijk.getRegioCode_id().getRegioCode();
+        this.wijkCode = wijk.getRegioCode_id().regioCode();
         this.naam = wijk.getNaam();
         this.aantalInwoners = wijk.getAantalInwoners();
         this.wijkInfo = new LocatieInfoDTO(wijk);
