@@ -1,5 +1,6 @@
 package nl.penguins.learnditwin.datatodomainconverter;
 
+import nl.penguins.learnditwin.datatodomainconverter.dataconverterhelpers.DataConverterHelper;
 import nl.penguins.learnditwin.datatodomainconverter.filetypehandelaar.ExcelHandelaar;
 import nl.penguins.learnditwin.plaats.data.GemeenteRepository;
 import nl.penguins.learnditwin.plaats.domain.Gemeente;
@@ -60,7 +61,7 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
                 Gemeente gemeente = gemeenteRepository.findGemeenteByCode(regioCode);
                 Locatie locatie = gemeente.getLocatieByRegioCode(regioCode);
 
-                double afgerondPercentageJongerDan15 = afronden(percentageJongerDan15In2023);
+                double afgerondPercentageJongerDan15 = DataConverterHelper.afronden(percentageJongerDan15In2023);
                 locatie.getLocatieInfo().getLeeftijd().setPercentageJongerDan15(afgerondPercentageJongerDan15);
                 gemeenteRepository.save(gemeente);
             } catch (Exception e){
@@ -79,7 +80,7 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
                 Gemeente gemeente = gemeenteRepository.findGemeenteByCode(regioCode);
                 Locatie locatie = gemeente.getLocatieByRegioCode(regioCode);
 
-                double afgerondPercentageOuderDan65 = afronden(percentageOuderDan65In2023);
+                double afgerondPercentageOuderDan65 = DataConverterHelper.afronden(percentageOuderDan65In2023);
                 locatie.getLocatieInfo().getLeeftijd().setPercentageOuderDan65(afgerondPercentageOuderDan65);
 
                 gemeenteRepository.save(gemeente);
@@ -100,7 +101,7 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
                 Gemeente gemeente = gemeenteRepository.findGemeenteByCode(regioCode);
                 Locatie locatie = gemeente.getLocatieByRegioCode(regioCode);
 
-                double percentage = naarPercentage(locatie.getAantalInwoners(), aantalHuishoudens1Persoons);
+                double percentage = DataConverterHelper.naarPercentage(locatie.getAantalInwoners(), aantalHuishoudens1Persoons);
                 locatie.getLocatieInfo().setHuishouden(percentage);
 
                 gemeenteRepository.save(gemeente);
@@ -138,7 +139,7 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
         for (String[] bijstand : bijstandData){
             String soortLocatie = bijstand[1];
             String stringRegioCode = bijstand[2];
-            double percentageBijstand = afronden(Double.parseDouble(bijstand[bijstand.length - 1]));
+            double percentageBijstand = DataConverterHelper.afronden(Double.parseDouble(bijstand[bijstand.length - 1]));
 
             RegioCode regioCode = new RegioCode(stringRegioCode);
 
@@ -177,11 +178,6 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
         }
     }
 
-    private double naarPercentage(double totaalInwoners, double deel){
-        double percentageAfgerond = (double) deel / totaalInwoners;
-        return afronden(percentageAfgerond);
-    }
-
     // todo als we dit willen doen, dan moet ik eerst de locatie ophalen. En daarna pas de gemeente.
 //    private void setDataEnSlaOp(String regioCode, Callable<T> setterFunctie){
 //        Gemeente gemeente = gemeenteRepository.findGemeenteByCode(regioCode);
@@ -192,9 +188,4 @@ public class AlleCijfersOverzichtGemeenteConverter implements DataConverter {
 //
 //        gemeenteRepository.save(gemeente);
 //    }
-
-    private double afronden(double getal){
-        DecimalFormat df = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US));
-        return Double.parseDouble(df.format(getal));
-    }
 }

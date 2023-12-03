@@ -1,5 +1,6 @@
 package nl.penguins.learnditwin.datatodomainconverter;
 
+import nl.penguins.learnditwin.datatodomainconverter.dataconverterhelpers.DataConverterHelper;
 import nl.penguins.learnditwin.datatodomainconverter.filetypehandelaar.ExcelHandelaar;
 import nl.penguins.learnditwin.plaats.data.GemeenteRepository;
 import nl.penguins.learnditwin.plaats.domain.Buurt;
@@ -30,7 +31,6 @@ public class GWBLaaggeletterdheidConverter implements DataConverter {
 
         String[] wijkInfo = wijkInfoSheet.get(0);
 
-        String provincie = wijkInfo[0];
         String gemeenteNaam = wijkInfo[1];
         String wijkNaam = wijkInfo[2];
         String buurtNaam = wijkInfo[3];
@@ -49,18 +49,9 @@ public class GWBLaaggeletterdheidConverter implements DataConverter {
 
             int base = Integer.parseInt((line[3]).split("\\.")[0]);
             totaalAantalHuishoudens += base;
-
-            // Deze informatie is alleen nodig als we de whizeSegmant erin willen verwerken
-//            String whizeSegmant = line[0];
-//            double percentageNT1Taalgroeier = Double.parseDouble(line[2].replace(",", "."));
-//            double basePercentage = Double.parseDouble(line[4].replace(",", "."));
-//            double index = Double.parseDouble(line[5].replace(",", "."));
-//            double percentagePenetratie = Double.parseDouble(line[6].replace(",", "."));
         }
 
-        double percentageTaalgroeiAfgerond = (double) totaalAantalHuishoudensTaalgroei / totaalAantalHuishoudens;
-        DecimalFormat df = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US));
-        percentageTaalgroeiAfgerond = Double.parseDouble(df.format(percentageTaalgroeiAfgerond));
+        double percentageTaalgroeiAfgerond = DataConverterHelper.naarPercentage(totaalAantalHuishoudens, totaalAantalHuishoudensTaalgroei);
 
         buurt.getLocatieInfo().setLaagGeletterdheid(percentageTaalgroeiAfgerond);
         gemeenteRepository.save(gemeente);

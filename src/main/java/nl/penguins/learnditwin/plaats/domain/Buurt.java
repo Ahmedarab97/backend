@@ -24,4 +24,9 @@ public class Buurt extends Locatie {
     public LaagGeletterdheid getLaagGeletterdheid() {
         return super.getLocatieInfo().getLaagGeletterdheid();
     }
+//
+//    @Override
+//    public double getPercentageFlatBewoners() {
+//        return super.getLocatieInfo().getWoonOmstandigheden().getPercentageFlatBewoners();
+//    }
 }

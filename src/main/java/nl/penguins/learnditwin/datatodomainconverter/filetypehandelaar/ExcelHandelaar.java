@@ -27,22 +27,19 @@ public class ExcelHandelaar extends FileHandelaar {
 
             List<String[]> ongefilterdeRijen = new ArrayList<>();
 
+            Row row1 = sheet.getRow(0);
+            int headerRowLength = row1.getPhysicalNumberOfCells();
+
             for (Row row : sheet) {
-                String[] rowData = new String[row.getLastCellNum()];
-
+                // TODO: zet integer om naar string
+                HashMap<Integer, String> map = new HashMap<>();
+                    IntStream.range(0, headerRowLength)
+                            .forEach(columnId-> map.put(columnId, null));
                 for (Cell cell : row) {
-                    int columnIndex = cell.getColumnIndex();
-
-                    if (cell.getCellType() == CellType.NUMERIC) {
-                        rowData[columnIndex] = String.valueOf(cell.getNumericCellValue());
-                    } else if (cell.getCellType() == CellType.STRING) {
-                        rowData[columnIndex] = cell.getStringCellValue();
-                    } else {
-                        rowData[columnIndex] = null;
-                    }
+                    map.put(cell.getColumnIndex(), extractCellValue(cell));
                 }
 
-                ongefilterdeRijen.add(rowData);
+                ongefilterdeRijen.add(map.values().toArray(new String[0]));
             }
 
             return ongefilterdeRijen;

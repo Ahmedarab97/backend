@@ -26,6 +26,8 @@ public abstract class Locatie {
     }
 
     public abstract LaagGeletterdheid getLaagGeletterdheid();
+//
+//    public abstract double getPercentageFlatBewoners();
 
     @Override
     public boolean equals(Object o) {
