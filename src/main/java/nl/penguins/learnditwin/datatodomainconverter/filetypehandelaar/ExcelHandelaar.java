@@ -7,11 +7,15 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Component
 public class ExcelHandelaar extends FileHandelaar {
     private int sheetNummer = 0;
+
+
     @Override
     public List<String[]> readData(String path) {
         try {
@@ -46,6 +50,14 @@ public class ExcelHandelaar extends FileHandelaar {
         } catch (IOException e) {
             return null;
         }
+    }
+
+    private String extractCellValue(Cell cell) {
+        return switch (cell.getCellType()) {
+            case NUMERIC -> String.valueOf(cell.getNumericCellValue());
+            case STRING ->cell.getStringCellValue();
+            default -> null;
+        };
     }
 
     public List<String[]> readData(String path, int optioneelSheetNummer) {
