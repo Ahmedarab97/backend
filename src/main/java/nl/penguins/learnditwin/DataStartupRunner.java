@@ -41,8 +41,8 @@ public class DataStartupRunner implements CommandLineRunner {
 //
 //        alleCijfersGezondheidMonitorConverter.convertData("data/allecijfers/gezondheidsmonitor-gemeente-nieuwegein.xlsx");
 //        alleCijfersOverzichtGemeenteConverter.convertData("data/allecijfers/overzicht-nieuwegein.xlsx");
-        alleCijfersOverzichtAdresGegevensConverter.convertData("data/allecijfers/adresgegevens-gemeente-nieuwegein.xlsx");
-//        objectToFileConverter.convertObjectenNaarExcel("Nieuwegein", "data");
+//        alleCijfersOverzichtAdresGegevensConverter.convertData("data/allecijfers/adresgegevens-gemeente-nieuwegein.xlsx");
+        objectToFileConverter.convertObjectenNaarExcel("Nieuwegein", "data");
     }
 
     private List<String> getPathFromFilesInMap(String mapPath) throws IOException {
