@@ -1,20 +1,20 @@
 package nl.penguins.learnditwin.plaats.data;
 
-import nl.penguins.learnditwin.plaats.domain.Buurt;
 import nl.penguins.learnditwin.plaats.domain.Gemeente;
+import nl.penguins.learnditwin.plaats.domain.ids.RegioCode;
+import nl.penguins.learnditwin.plaats.exception.GemeenteNotFoundException;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import java.util.List;
 import java.util.Optional;
 
-public interface GemeenteRepository extends MongoRepository<Gemeente, String> {
+public interface GemeenteRepository extends MongoRepository<Gemeente, RegioCode> {
     Optional<Gemeente> findByNaam(String naam);
-    default List<Buurt> vindBuurtenVanGemeente(String gemeenteNaam){
-        Optional<Gemeente> gemeentes = findByNaam(gemeenteNaam);
 
-        return gemeentes.stream()
-                .flatMap(gemeente -> gemeente.getWijken().stream())
-                .flatMap(wijk -> wijk.getBuurten().stream())
-                .toList();
+    default Gemeente findGemeenteByCode(RegioCode regioCode) {
+        RegioCode gemeenteCode = regioCode.getGemeenteCode();
+
+        return findById(gemeenteCode)
+                .orElseThrow(() -> new GemeenteNotFoundException
+                        (String.format("Gemeente met regioCode %s niet gevonden", gemeenteCode)));
     }
 }

@@ -2,7 +2,6 @@ package nl.penguins.learnditwin.datatofileconverter;
 
 import nl.penguins.learnditwin.plaats.data.GemeenteRepository;
 import nl.penguins.learnditwin.plaats.domain.Gemeente;
-import nl.penguins.learnditwin.plaats.domain.Locatie;
 import nl.penguins.learnditwin.plaats.domain.Wijk;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -41,7 +40,7 @@ public class ObjectToFileConverter {
             headerRow.createCell(3).setCellValue("buurtCode");
             headerRow.createCell(4).setCellValue("buurtNaam");
             headerRow.createCell(5).setCellValue("postCode6");
-            headerRow.createCell(6).setCellValue("aantalHuishoudens");
+            headerRow.createCell(6).setCellValue("aantalInwoners");
 
             headerRow.createCell(7).setCellValue("percentageHuishoudensMetTaalgroei");
             // Aanvullen voor AlcoholGebruik
@@ -98,6 +97,11 @@ public class ObjectToFileConverter {
             // Aanvullen voor Roken
             headerRow.createCell(39).setCellValue("percentageRokers");
 
+            headerRow.createCell(40).setCellValue("percentageJongerDan15");
+            headerRow.createCell(41).setCellValue("percentageOuderDan65");
+
+            headerRow.createCell(42).setCellValue("percentageEenpersoonsHuishouden");
+
 
             AtomicInteger indexExcel = new AtomicInteger(1);
             wijken.forEach(wijk -> {
@@ -105,16 +109,16 @@ public class ObjectToFileConverter {
                         .forEach(buurt -> {
                             Row row = sheet.createRow(indexExcel.getAndIncrement());
 
-                            row.createCell(0).setCellValue(wijk.getRegioCode_id());
+                            row.createCell(0).setCellValue(wijk.getRegioCode_id().getRegioCode());
                             row.createCell(1).setCellValue(wijk.getPostcode4());
                             row.createCell(2).setCellValue(wijk.getNaam());
 
-                            row.createCell(3).setCellValue(buurt.getRegioCode_id());
+                            row.createCell(3).setCellValue(buurt.getRegioCode_id().getRegioCode());
                             row.createCell(4).setCellValue(buurt.getNaam());
                             row.createCell(5).setCellValue(buurt.getPostcode6().toString());
-                            row.createCell(6).setCellValue(buurt.getRegioCode_id());
+                            row.createCell(6).setCellValue(buurt.getAantalInwoners());
 
-                            for (int i = 6; i <= 39; i++) {
+                            for (int i = 6; i <= 42; i++) {
                                 int cellIndex = i;
 
                                 Optional.ofNullable(buurt.getLaagGeletterdheid())
@@ -142,7 +146,7 @@ public class ObjectToFileConverter {
 
                                 Optional.ofNullable(buurt.getLocatieInfo().getFinancieel())
                                         .map(financieel -> switch (cellIndex) {
-                                            case 14 -> financieel.percentageMoeiteMetRondkomen();
+                                            case 14 -> financieel.getPercentageMoeiteMetRondkomen();
                                             default -> null;
                                         }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
@@ -210,6 +214,18 @@ public class ObjectToFileConverter {
                                             default -> null;
                                         }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
 
+                                Optional.ofNullable(buurt.getLocatieInfo().getLeeftijd())
+                                        .map(leeftijd -> switch (cellIndex) {
+                                            case 40 -> leeftijd.getPercentageJongerDan15();
+                                            case 41 -> leeftijd.getPercentageOuderDan65();
+                                            default -> null;
+                                        }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
+
+                                Optional.ofNullable(buurt.getLocatieInfo().getHuishouden())
+                                        .map(huishouden -> switch (cellIndex) {
+                                            case 42 -> huishouden.percentage1PersoonsHuishoudens();
+                                            default -> null;
+                                        }).ifPresent(value -> row.createCell(cellIndex).setCellValue(value));
                             }
                         });
                 indexExcel.getAndIncrement();

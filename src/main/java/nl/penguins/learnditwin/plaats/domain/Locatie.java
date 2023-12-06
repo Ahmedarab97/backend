@@ -1,44 +1,28 @@
 package nl.penguins.learnditwin.plaats.domain;
 
+import lombok.Getter;
 import nl.penguins.learnditwin.plaats.domain.buurtinfo.*;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.FieldType;
-import org.springframework.data.mongodb.core.mapping.MongoId;
+import nl.penguins.learnditwin.plaats.domain.ids.RegioCode;
+import org.springframework.data.annotation.Id;
 
 import java.util.Objects;
 
-@Document("locatie")
+@Getter
 public abstract class Locatie {
-    @MongoId(FieldType.STRING)
-    @Field("regioCode_id")
-    @Indexed(unique = true)
-    protected String regioCode_id;
+    @Id
+    protected RegioCode regioCode_id;
     protected String naam;
+    protected int aantalInwoners;
     protected LocatieInfo locatieInfo;
 
-    public Locatie(String regioCode, String naam) {
-        this.regioCode_id = regioCode;
+    public Locatie(RegioCode regioCode_id, String naam) {
+        this.regioCode_id = regioCode_id;
         this.naam = naam;
         this.locatieInfo = new LocatieInfo();
     }
 
-    protected Locatie() {
-    }
-
-    public abstract int getAantalInwoners();
-
-    public String getNaam() {
-        return naam;
-    }
-
-    public String getRegioCode_id() {
-        return regioCode_id;
-    }
-
-    public LocatieInfo getLocatieInfo() {
-        return locatieInfo;
+    public void setAantalHuishoudens(int aantalInwoners) {
+        this.aantalInwoners = aantalInwoners;
     }
 
     public abstract LaagGeletterdheid getLaagGeletterdheid();

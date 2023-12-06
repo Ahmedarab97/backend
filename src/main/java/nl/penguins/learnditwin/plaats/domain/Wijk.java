@@ -1,7 +1,8 @@
 package nl.penguins.learnditwin.plaats.domain;
 
+import lombok.Getter;
 import nl.penguins.learnditwin.plaats.domain.buurtinfo.LaagGeletterdheid;
-import org.springframework.data.mongodb.core.mapping.*;
+import nl.penguins.learnditwin.plaats.domain.ids.RegioCode;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -9,23 +10,29 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-@Document("wijk")
-public class Wijk extends Locatie{
+@Getter
+public class Wijk extends Locatie {
     private final String postcode4;
-    @DBRef
     private Set<Buurt> buurten;
 
-    public Wijk(String regioCode_id, String naam, String postcode4) {
+    public Wijk(RegioCode regioCode_id, String naam, String postcode4) {
         super(regioCode_id, naam);
         this.postcode4 = postcode4;
         this.buurten = new HashSet<>();
     }
 
-    @Override
-    public int getAantalInwoners() {
+    public Buurt getBuurtByRegioCode(RegioCode buurtId){
         return buurten.stream()
-                .mapToInt(Buurt::getAantalInwoners)
-                .sum();
+                .filter(buurt -> buurt.getRegioCode_id().equals(buurtId))
+                .findFirst()
+                .orElseThrow();
+    }
+
+    public Buurt getBuurtByNaam(String buurtNaam){
+        return buurten.stream()
+                .filter(buurt -> buurt.getNaam().equals(buurtNaam))
+                .findFirst()
+                .orElseThrow();
     }
 
     @Override
@@ -33,8 +40,8 @@ public class Wijk extends Locatie{
         int totaalInwoners = 0;
         int totaalAantalLaagGeletterde = 0;
 
-        for (Buurt buurt : buurten){
-            if (buurt.getLaagGeletterdheid() != null){
+        for (Buurt buurt : buurten) {
+            if (buurt.getLaagGeletterdheid() != null) {
                 int aantalInwoners = buurt.getAantalInwoners();
                 double laagGeletterdheidPercentage = buurt.getLaagGeletterdheid().percentageTaalgroei();
 
@@ -48,15 +55,8 @@ public class Wijk extends Locatie{
         percentageTaalgroei = Double.parseDouble(df.format(percentageTaalgroei));
         return new LaagGeletterdheid(percentageTaalgroei);
     }
+
     public void addBuurt(Buurt buurt) {
         this.buurten.add(buurt);
-    }
-
-    public String getPostcode4() {
-        return postcode4;
-    }
-
-    public Set<Buurt> getBuurten() {
-        return buurten;
     }
 }

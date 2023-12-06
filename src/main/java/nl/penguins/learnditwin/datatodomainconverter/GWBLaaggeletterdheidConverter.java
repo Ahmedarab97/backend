@@ -1,10 +1,9 @@
 package nl.penguins.learnditwin.datatodomainconverter;
 
 import nl.penguins.learnditwin.datatodomainconverter.filetypehandelaar.ExcelHandelaar;
-import nl.penguins.learnditwin.plaats.data.BuurtRepository;
-import nl.penguins.learnditwin.plaats.data.WijkRepository;
+import nl.penguins.learnditwin.plaats.data.GemeenteRepository;
 import nl.penguins.learnditwin.plaats.domain.Buurt;
-import nl.penguins.learnditwin.plaats.domain.buurtinfo.LaagGeletterdheid;
+import nl.penguins.learnditwin.plaats.domain.Gemeente;
 import org.springframework.stereotype.Component;
 
 import java.text.DecimalFormatSymbols;
@@ -17,13 +16,11 @@ import java.util.List;
 @Component
 public class GWBLaaggeletterdheidConverter implements DataConverter {
     private final ExcelHandelaar fileHandler;
-    private final BuurtRepository buurtRepository;
-    private final WijkRepository wijkRepository;
+    private final GemeenteRepository gemeenteRepository;
 
-    public GWBLaaggeletterdheidConverter(ExcelHandelaar fileHandler, BuurtRepository buurtRepository, WijkRepository wijkRepository) {
+    public GWBLaaggeletterdheidConverter(ExcelHandelaar fileHandler, GemeenteRepository gemeenteRepository) {
         this.fileHandler = fileHandler;
-        this.buurtRepository = buurtRepository;
-        this.wijkRepository = wijkRepository;
+        this.gemeenteRepository = gemeenteRepository;
     }
 
     @Override
@@ -34,11 +31,13 @@ public class GWBLaaggeletterdheidConverter implements DataConverter {
         String[] wijkInfo = wijkInfoSheet.get(0);
 
         String provincie = wijkInfo[0];
-        String gemeente = wijkInfo[1];
-        String wijk = wijkInfo[2];
+        String gemeenteNaam = wijkInfo[1];
+        String wijkNaam = wijkInfo[2];
         String buurtNaam = wijkInfo[3];
 
-        Buurt buurt = wijkRepository.findBuurtByWijkAndBuurtNaam(wijk, buurtNaam).orElseThrow(() -> new RuntimeException("Buurt niet gevonden"));
+        Gemeente gemeente = gemeenteRepository.findByNaam(gemeenteNaam).orElseThrow();
+        Buurt buurt = gemeente.getWijkByWijkNaam(wijkNaam)
+                .getBuurtByNaam(buurtNaam);
 
         int totaalAantalHuishoudensTaalgroei = 0;
         int totaalAantalHuishoudens = 0;
@@ -52,11 +51,11 @@ public class GWBLaaggeletterdheidConverter implements DataConverter {
             totaalAantalHuishoudens += base;
 
             // Deze informatie is alleen nodig als we de whizeSegmant erin willen verwerken
-            String whizeSegmant = line[0];
-            double percentageNT1Taalgroeier = Double.parseDouble(line[2].replace(",", "."));
-            double basePercentage = Double.parseDouble(line[4].replace(",", "."));
-            double index = Double.parseDouble(line[5].replace(",", "."));
-            double percentagePenetratie = Double.parseDouble(line[6].replace(",", "."));
+//            String whizeSegmant = line[0];
+//            double percentageNT1Taalgroeier = Double.parseDouble(line[2].replace(",", "."));
+//            double basePercentage = Double.parseDouble(line[4].replace(",", "."));
+//            double index = Double.parseDouble(line[5].replace(",", "."));
+//            double percentagePenetratie = Double.parseDouble(line[6].replace(",", "."));
         }
 
         double percentageTaalgroeiAfgerond = (double) totaalAantalHuishoudensTaalgroei / totaalAantalHuishoudens;
@@ -64,7 +63,6 @@ public class GWBLaaggeletterdheidConverter implements DataConverter {
         percentageTaalgroeiAfgerond = Double.parseDouble(df.format(percentageTaalgroeiAfgerond));
 
         buurt.getLocatieInfo().setLaagGeletterdheid(percentageTaalgroeiAfgerond);
-        buurt.setAantalHuishoudens(totaalAantalHuishoudens);
-        buurtRepository.save(buurt);
+        gemeenteRepository.save(gemeente);
     }
 }

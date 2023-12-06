@@ -1,4 +1,14 @@
 package nl.penguins.learnditwin.plaats.domain.buurtinfo;
 
-public record Financieel (double percentageMoeiteMetRondkomen){
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class Financieel {
+    private double percentageMoeiteMetRondkomen;
+    private double percentageBijstand;
+
+    public Financieel() {
+    }
 }
